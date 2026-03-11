@@ -4,13 +4,38 @@
         <meta charset = "UTF-8">
         <meta name = "viewport" content = "width=device-width, intial-scale=1.0">
         <title>Movie Theater</title>
-        <link rel="stylesheet" href="stles.css" />
+        <link rel="stylesheet" href="style.css" />
 
     </head>
 
-    <body style = "background-color: black;">
-        <h1 style = "color: aliceblue;">This is our Movie Theater Website!<h1>
-        <h1 style = "color: aliceblue;"> Hello world</h1>
-        <a href = "./pages/aboutus.html"> Learn more about us!</a>
+    <body>
+
+        <header>
+            <img src="./images/Logo.png" alt="Movie Theater Logo";>
+            <h1 style="text-align: center;">Welcome to our Movie Theater!</h1>
+            <div class = "push right">
+                <nav>
+                 <ul>
+                        <li><button type = "button">
+                            <img src="images/home-icon.svg" alt = "Home Icon" >
+                            <a href="index.html"></a>
+                        </button></li>
+
+                        <li><a href="pages/viewtimes.html">
+                            <button type = "button">
+                            <img src="images/movie-icon.svg" alt = "View Times Icon" >
+                            </button>
+                        </a></li>
+
+                        <li><a href="pages/aboutus.html">
+                            <button type = "button"> 
+                            <img src = "images/about-us-icon.svg" alt = "About Us Icon">
+                            </button>
+                        </a></li>
+
+                    </ul>
+                </nav>
+            </div>
+        </header>
     </body>
 </html>
