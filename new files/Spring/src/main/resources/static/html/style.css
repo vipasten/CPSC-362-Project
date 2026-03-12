@@ -68,3 +68,10 @@ a{
     width: 100px;
     height: 100px;
 }
+.login {
+    display: flex;
+    background-color: var(--movie-red);
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}

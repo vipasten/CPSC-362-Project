@@ -11,19 +11,22 @@
     <body>
             <h1>
                 <div class="login">
-                    <h1>Login Form</h1>
+                    <h1>Sign up Form</h1>
 
-                    <form action="/login" method="post">
+                    <form action="/signup" method="post">
+                        <label for="fname">First Name:</label>
+                        <input type="text" id="fname" name="fname" required><br><br>
+
+                        <label for="lname">Last Name:</label>
+                        <input type="text" id="lname" name="lname" required><br><br>
+
                         <label for="username">Username:</label>
                         <input type="text" id="username" name="username" required><br><br>
                         
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" required><br><br>
                         
-                        <input type="submit" value="Login">
-                        <div>
-                            <p1>Don't have an account? <a href="signup.html">Sign up here!</a>.</p1>
-                        </div>
+                        <input type="submit" value="Create Account">
                     </form>
                 </div>
             </h1>
