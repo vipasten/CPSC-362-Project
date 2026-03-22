@@ -13,10 +13,20 @@
 
 body {
     background-color: var(--base-color);
+    height: 100%
 }
 
+.content {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
+
 /*All headers use Bold Kanit*/
-h1, h2, h3 { 
+h1, h2, h3 {
     color: var(--text-color);
     font-family: "Kanit", sans-serif;
     font-weight: 700;
@@ -34,8 +44,8 @@ p1, p2, p3 {
 /*Formatting for the nav bar*/
 nav{
     margin: 1em auto 3em auto;
+    justify-content: center;
     width: min(1000px, 100%);
-  
 }
 
 nav ul{
@@ -43,8 +53,14 @@ nav ul{
     align-items: center;
     list-style-type: none;
     gap: 2em;
-     display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-container {
+    display: flex;
+    align-items: left;
+    gap: 1em;
 }
 
 /*Formatting for images*/
@@ -68,10 +84,35 @@ a{
     width: 100px;
     height: 100px;
 }
-.login {
+.forms {
     display: flex;
     background-color: var(--movie-red);
     flex-direction: column;
     align-items: center;
     gap: 1em;
+}
+
+.large-input {
+    display: flex;
+    width: 300px;
+    height: 100px;
+    padding: 10px;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+}
+
+.listing{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 1em;
+}
+
+.wrap-text{
+    display: flex;
+    gap: 2em;
 }
