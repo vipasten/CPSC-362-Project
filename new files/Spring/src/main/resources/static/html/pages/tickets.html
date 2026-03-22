@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .booking-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 700px;
+        }
+
+        .showtime-panel {
+            position: absolute;
+            left: 0;
+            top: 110px;
+            width: 180px;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            text-align: middle;
+        }
+
+        .showtime-panel h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .showtime-btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 999px;
+            background: transparent;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .showtime-btn.selected-time {
+            background: #ab191ecd;
+            border-color: #ab191ecd;
+        }
+
+        .seat-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .screen {
+            width: 60%;
+            max-width: 520px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #ddd;
+            color: black;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .seat-layout {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .seat {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .available {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .selected {
+            background-color: #FFE96B;
+            color: black;
+        }
+
+        .taken {
+            background-color: #b0b0b0;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .legend {
+            margin-top: 20px;
+        }
+
+        .legend span {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        .legend-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .continue-btn {
+            margin-top: 25px;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Select Your Seats</h1>
+    <h2 id="movieTitle"></h2>
+
+    <div class="booking-container">
+        <div class="showtime-panel">
+            <h3>Available Timings</h3>
+            <button class="showtime-btn" onclick="selectShowtime(this, '10:15 AM')">10:15 AM</button>
+            <button class="showtime-btn" onclick="selectShowtime(this, '1:30 PM')">1:30 PM</button>
+            <button class="showtime-btn" onclick="selectShowtime(this, '4:45 PM')">4:45 PM</button>
+            <button class="showtime-btn" onclick="selectShowtime(this, '8:00 PM')">8:00 PM</button>
+        </div>
+
+        <div class="seat-section">
+            <div class="screen">SCREEN</div>
+
+            <div class="seat-layout" id="seatLayout"></div>
+
+            <div class="legend">
+                <span><span class="legend-box" style="background:#4caf50;"></span>Available</span>
+                <span><span class="legend-box" style="background:#FFE96B;"></span>Selected</span>
+                <span><span class="legend-box" style="background:#b0b0b0;"></span>Taken</span>
+            </div>
+
+            
+            <button class="continue-btn">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const movie = params.get("movie");
+        document.getElementById("movieTitle").textContent = movie ? movie : "No movie selected";
+
+        const seatLayout = document.getElementById("seatLayout");
+
+        const rows = ["A", "B", "C", "D", "E"];
+        const seatsPerRow = 8;
+
+        const takenSeats = [];
+        let selectedSeats = [];
+        let selectedShowtime = null;
+
+        function renderSeats() {
+            seatLayout.innerHTML = "";
+
+            rows.forEach(row => {
+                for (let i = 1; i <= seatsPerRow; i++) {
+                    const seatId = row + i;
+                    const button = document.createElement("button");
+                    button.textContent = seatId;
+                    button.classList.add("seat");
+
+                    if (takenSeats.includes(seatId)) {
+                        button.classList.add("taken");
+                        button.disabled = true;
+                    } else if (selectedSeats.includes(seatId)) {
+                        button.classList.add("selected");
+                    } else {
+                        button.classList.add("available");
+                    }
+
+                    button.addEventListener("click", () => toggleSeat(seatId));
+                    seatLayout.appendChild(button);
+                }
+            });
+        }
+
+        function toggleSeat(seatId) {
+            if (selectedSeats.includes(seatId)) {
+                selectedSeats = selectedSeats.filter(seat => seat !== seatId);
+            } else {
+                selectedSeats.push(seatId);
+            }
+            renderSeats();
+        }
+
+        function selectShowtime(button, time) {
+            selectedShowtime = time;
+
+            document.querySelectorAll(".showtime-btn").forEach(btn => {
+                btn.classList.remove("selected-time");
+            });
+
+            button.classList.add("selected-time");
+        }
+
+        renderSeats();
+    </script>
+
+</body>
+</html>
