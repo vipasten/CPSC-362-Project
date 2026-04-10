@@ -8,7 +8,13 @@
 </head>
 <body>
     <h1 style="color: rgb(255, 255, 255);">Today's Movie Showtimes</h1>
-    <p style="color: rgb(255, 255, 255);">Monday, March 23, 2026</p>
+    <p style="color: rgb(255, 255, 255);" id="todayDate"></p>
+
+<script>
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById("todayDate").textContent = today.toLocaleDateString('en-US', options);
+</script>
 
     <div style="display:flex; flex-wrap:wrap; gap:20px; padding:20px;">
 
@@ -18,7 +24,7 @@
             <p>2 HR 45 MIN | PG-13</p>
             <p>Sci-Fi</p>
             <p>10:15 AM &nbsp; 1:30 PM &nbsp; 4:45 PM &nbsp; 8:00 PM</p>
-            <a href="tickets.html?movie=Dune%3A%20Part%20Four">
+            <a href="tickets.html?movie=Dune%3A%20Part%20Four&showtimes=10:15 AM,1:30 PM,4:45 PM,8:00 PM">
                 <button>Get Tickets</button>
             </a>
         </div>
@@ -29,7 +35,7 @@
             <p>1 HR 58 MIN | R</p>
             <p>Thriller</p>
             <p>11:00 AM &nbsp; 2:15 PM &nbsp; 7:30 PM</p>
-            <a href="tickets.html?movie=Godzilla%20v.%20Batman">
+            <a href="tickets.html?movie=Godzilla%20v.%20Batman&showtimes=11:00 AM,2:15 PM,7:30 PM">
                 <button>Get Tickets</button>
             </a>
         </div>
@@ -40,7 +46,7 @@
             <p>2 HR 10 MIN | PG-13</p>
             <p>Action</p>
             <p>12:00 PM &nbsp; 3:30 PM &nbsp; 6:00 PM &nbsp; 9:15 PM</p>
-            <a href="tickets.html?movie=Fart%20Wars">
+            <a href="tickets.html?movie=Fart%20Wars&showtimes=12:00 PM,3:30 PM,6:00 PM,9:15 PM">
                 <button>Get Tickets</button>
             </a>
         </div>
@@ -51,7 +57,7 @@
             <p>1 HR 42 MIN | PG</p>
             <p>Romance</p>
             <p>11:30 AM &nbsp; 2:00 PM &nbsp; 4:30 PM &nbsp; 7:00 PM</p>
-            <a href="tickets.html?movie=Amogus">
+            <a href="tickets.html?movie=Amogus&showtimes=11:30 AM,2:00 PM,4:30 PM,7:00 PM">
                 <button>Get Tickets</button>
             </a>
         </div>
@@ -62,7 +68,7 @@
             <p>6 HR 7 MIN | PG-67</p>
             <p>Psychological Horror</p>
             <p>6:07 PM &nbsp; 6:70 PM &nbsp; 67:67 PM</p>
-            <a href="tickets.html?movie=67%3A%20The%20Movie">
+            <a href="tickets.html?movie=67%3A%20The%20Movie&showtimes=6:07 PM,6:70 PM,67:67 PM">
                 <button>Get Tickets</button>
             </a>
         </div>

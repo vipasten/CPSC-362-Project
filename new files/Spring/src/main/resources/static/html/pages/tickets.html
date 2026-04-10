@@ -148,10 +148,7 @@
     <div class="booking-container">
         <div class="showtime-panel">
             <h3>Available Timings</h3>
-            <button class="showtime-btn" onclick="selectShowtime(this, '10:15 AM')">10:15 AM</button>
-            <button class="showtime-btn" onclick="selectShowtime(this, '1:30 PM')">1:30 PM</button>
-            <button class="showtime-btn" onclick="selectShowtime(this, '4:45 PM')">4:45 PM</button>
-            <button class="showtime-btn" onclick="selectShowtime(this, '8:00 PM')">8:00 PM</button>
+                <div id="showtimeButtons"></div>
         </div>
 
         <div class="seat-section">
@@ -166,7 +163,7 @@
             </div>
 
             
-            <button class="continue-btn">Continue</button>
+            <button class="continue-btn" onclick="goToConfirmation()">Continue</button>
         </div>
     </div>
 
@@ -228,7 +225,33 @@
             button.classList.add("selected-time");
         }
 
+    function goToConfirmation() {
+        if (!selectedShowtime) {
+            alert("Stop right there! Please select a showtime first!");
+            return;
+        }
+        if (selectedSeats.length === 0) {
+            alert("Dude! Please select at least one seat!");
+            return;
+        }
+
+        const seats = selectedSeats.join(",");
+        window.location.href = "seatconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(selectedShowtime) + "&seats=" + encodeURIComponent(seats);
+    }
+
         renderSeats();
+
+        const showtimesParam = params.get("showtimes");
+        const showtimeList = showtimesParam ? showtimesParam.split(",") : [];
+        const showtimeContainer = document.getElementById("showtimeButtons");
+
+        showtimeList.forEach(time => {
+        const btn = document.createElement("button");
+        btn.className = "showtime-btn";
+        btn.textContent = time.trim();
+        btn.onclick = function() { selectShowtime(btn, time.trim()); };
+        showtimeContainer.appendChild(btn);
+}); 
     </script>
 
 </body>

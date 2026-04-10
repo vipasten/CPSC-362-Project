@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .checkmark {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .receipt {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .receipt h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #4caf50;
+        }
+
+        .receipt p {
+            font-size: 16px;
+            margin: 12px 0;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .receipt p.total-line {
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: none;
+        }
+
+        .receipt span {
+            color: #FFE96B;
+            font-weight: bold;
+        }
+
+        .order-number {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 20px;
+        }
+
+        .home-btn {
+            margin-top: 25px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+            width: 100%;
+        }
+
+        .home-btn:hover {
+            background: #8a1015;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkmark">✅</div>
+    <h1>Payment Confirmed!</h1>
+    <p>Wow, can't believe you actually bought tickets to a movie that doesn't exist. Thanks for your card information we guess? We're definitely buying a lot of chicken nuggies with it!</p>
+
+    <div class="receipt">
+        <h2>Your Receipt</h2>
+        <p class="order-number" id="orderNumber"></p>
+        <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Showtime: <span id="showtimeDisplay"></span></p>
+        <p>Seats: <span id="seatsDisplay"></span></p>
+        <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
+        <p>Subtotal: <span id="subtotalDisplay"></span></p>
+        <p>Tax (7.75% CA): <span id="taxDisplay"></span></p>
+        <p class="total-line"> Total Paid: <span id="totalDisplay"></span></p>
+
+        <button class="home-btn" onclick="window.location.href='../index.html'">Back to Home</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const movie = params.get("movie");
+        const showtime = params.get("showtime");
+        const seats = params.get("seats");
+        const total = parseFloat(params.get("total"));
+        const seatCount = seats.split(",").length;
+
+        const taxRate = 0.0775;
+        const subtotal = total / (1 + taxRate);
+        const tax = total - subtotal;
+
+        const orderNumber = "ORD-" + Math.floor(Math.random() * 900000 + 100000);
+
+        document.getElementById("orderNumber").textContent = "Order #: " + orderNumber;
+        document.getElementById("movieDisplay").textContent = movie;
+        document.getElementById("showtimeDisplay").textContent = showtime;
+        document.getElementById("seatsDisplay").textContent = seats;
+        document.getElementById("totalSeatsDisplay").textContent = seatCount + " seat(s)";
+        document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
+        document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
+        document.getElementById("totalDisplay").textContent = "$" + total.toFixed(2);
+    </script>
+
+</body>
+</html>
