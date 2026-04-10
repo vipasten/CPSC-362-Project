@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Confirmation</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .confirmation-box {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+            .confirmation-box p {
+                font-size: 18px;
+                margin: 15px 0;
+                color: white;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                padding-bottom: 10px;
+                word-break: break-all;
+            }
+
+        .confirmation-box span {
+            color: #FFE96B;
+            font-weight: bold;
+        }
+
+        .confirm-btn {
+            margin-top: 25px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+            width: 100%;
+        }
+
+        .confirm-btn:hover {
+            background: #8a1015;
+        }
+
+        .back-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            width: 100%;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Seat Confirmation</h1>
+    <p>Does this look right? I hope so. You're about to pay a lot of money for movies that don't actually exist, buddy!</p>
+
+    <div class="confirmation-box">
+        <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Showtime: <span id="showtimeDisplay"></span></p>
+        <p>Seats: <span id="seatsDisplay"></span></p>
+        <p>Total Seats: <span id="totalDisplay"></span></p>
+
+        <button class="confirm-btn" onclick="goToPayment()">Proceed to Payment</button>
+        <button class="back-btn" onclick="history.back()">Go Back</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const movie = params.get("movie");
+        const showtime = params.get("showtime");
+        const seats = params.get("seats");
+
+        document.getElementById("movieDisplay").textContent = movie;
+        document.getElementById("showtimeDisplay").textContent = showtime;
+        document.getElementById("seatsDisplay").textContent = seats;
+        document.getElementById("totalDisplay").textContent = seats.split(",").length + " seat(s)";
+
+        function goToPayment() {
+            window.location.href = "paymentpage.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats);
+        }
+    </script>
+
+</body>
+</html>

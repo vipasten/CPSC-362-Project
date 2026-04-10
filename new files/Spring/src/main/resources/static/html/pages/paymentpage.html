@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .order-summary {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .order-summary h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .order-summary p {
+            font-size: 16px;
+            margin: 10px 0;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+            word-break: break-all;
+        }
+
+        .order-summary p.total-line {
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: none;
+        }
+
+        .order-summary span {
+            color: #FFE96B;
+            font-weight: bold;
+        }
+
+        .payment-form {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .payment-form h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .pay-btn {
+            margin-top: 10px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+            width: 100%;
+        }
+
+        .pay-btn:hover {
+            background: #8a1015;
+        }
+
+        .back-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            width: 100%;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Payment</h1>
+    <p>SO CLOSE! WE'RE SO CLOSE TO HAVING YOUR MONEY! CMOOOON! JUST ENTER YOUR PAYMENT INFORMATION! CMOOOOOOOOON!</p>
+
+    <div class="order-summary">
+        <h2>Order Summary</h2>
+        <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Showtime: <span id="showtimeDisplay"></span></p>
+        <p>Seats: <span id="seatsDisplay"></span></p>
+        <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
+        <p>Subtotal: <span id="subtotalDisplay"></span></p>
+        <p>Tax (7.75% CA): <span id="taxDisplay"></span></p>
+        <p class="total-line">Total: <span id="totalDisplay"></span></p>
+    </div>
+
+    <div class="payment-form">
+        <h2>Card Details</h2>
+
+        <div class="form-group">
+            <label for="cardName">Name on Card</label>
+            <input type="text" id="cardName" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="expiry">Expiration Date</label>
+                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" placeholder="123" maxlength="3" required>
+            </div>
+        </div>
+
+        <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+        <button class="back-btn" onclick="history.back()">Go Back</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const movie = params.get("movie");
+        const showtime = params.get("showtime");
+        const seats = params.get("seats");
+        const seatCount = seats.split(",").length;
+
+        const pricePerSeat = 12.99;
+        const subtotal = seatCount * pricePerSeat;
+        const taxRate = 0.0775;
+        const tax = subtotal * taxRate;
+        const totalPrice = subtotal + tax;
+
+        document.getElementById("movieDisplay").textContent = movie;
+        document.getElementById("showtimeDisplay").textContent = showtime;
+        document.getElementById("seatsDisplay").textContent = seats;
+        document.getElementById("totalSeatsDisplay").textContent = seatCount + " seat(s)";
+        document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
+        document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
+        document.getElementById("totalDisplay").textContent = "$" + totalPrice.toFixed(2);
+
+        document.getElementById("cardNumber").addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, "");
+            value = value.replace(/(.{4})/g, "$1 ").trim();
+            this.value = value;
+        });
+
+        document.getElementById("expiry").addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, "");
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + "/" + value.substring(2);
+            }
+            this.value = value;
+        });
+
+        function processPayment() {
+            const cardName = document.getElementById("cardName").value;
+            const cardNumber = document.getElementById("cardNumber").value;
+            const expiry = document.getElementById("expiry").value;
+            const cvv = document.getElementById("cvv").value;
+
+        if (!cardName || !cardNumber || !expiry || !cvv) {
+            alert("Yo! You didn't fill in all the payment fields, dummy!");
+            return;
+        }
+
+        const cardDigits = cardNumber.replace(/\s/g, "");
+        if (cardDigits.length !== 16 || isNaN(cardDigits)) {
+            alert("LOOK AT YOUR CARD NUMBER. DOES THAT LOOK LIKE 16 DIGITS TO YOU?!");
+            return;
+        }
+
+        if (cvv.length !== 3 || isNaN(cvv)) {
+            alert("A NORMAL HUMAN HAVE THREE FINGERS. LOOK AT YOUR FINGERS AND COUNT TO THREE. THAT'S HOW MUCH DIGITS SHOULD BE IN THE CCV!");
+            return;
+        }
+
+        const parts = expiry.split("/");
+        if (parts.length !== 2) {
+            alert("BASED ON YOUR ''EXPIRY DATE'', THAT CARD DON'T BE LOOKIN VALID, BUDDY!");
+            return;
+        }
+
+        const month = parseInt(parts[0]);
+        const year = parseInt("20" + parts[1]);
+        const now = new Date();
+        if (month < 1 || month > 12) {
+            alert("YO! MONTHS ONLY GO UP TO 12. CHECK YOUR EXPIRY DATE AGAIN.");
+            return;
+        }
+        if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1)) {
+            alert("HAHAHAHHAHA! YOUR CARD IS EXPIRED! HAHAHAHAHA!");
+            return;
+        }
+
+            // Yo Milan! I trust you with this! This is where I'm hoping you can use what you got from your backend side to help save the order
+            window.location.href = "paymentconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats) + "&total=" + encodeURIComponent(totalPrice.toFixed(2));
+        }
+    </script>
+
+</body>
+</html>
