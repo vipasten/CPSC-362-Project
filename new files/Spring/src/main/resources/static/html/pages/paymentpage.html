@@ -141,6 +141,7 @@
     <div class="order-summary">
         <h2>Order Summary</h2>
         <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Date: <span id="dateDisplay"></span></p>
         <p>Showtime: <span id="showtimeDisplay"></span></p>
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
@@ -182,6 +183,7 @@
         const movie = params.get("movie");
         const showtime = params.get("showtime");
         const seats = params.get("seats");
+        const date = params.get("date");
         const seatCount = seats.split(",").length;
 
         const pricePerSeat = 12.99;
@@ -197,6 +199,12 @@
         document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
         document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
         document.getElementById("totalDisplay").textContent = "$" + totalPrice.toFixed(2);
+
+        if (date) {
+            const formatted = new Date(date + "T00:00:00");
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
+        }
 
         document.getElementById("cardNumber").addEventListener("input", function() {
             let value = this.value.replace(/\D/g, "");
@@ -253,7 +261,7 @@
         }
 
             // Yo Milan! I trust you with this! This is where I'm hoping you can use what you got from your backend side to help save the order
-            window.location.href = "paymentconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats) + "&total=" + encodeURIComponent(totalPrice.toFixed(2));
+            window.location.href = "paymentconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats) + "&total=" + encodeURIComponent(totalPrice.toFixed(2)) + "&date=" + encodeURIComponent(date);
         }
     </script>
 

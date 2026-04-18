@@ -89,6 +89,7 @@
         <h2>Your Receipt</h2>
         <p class="order-number" id="orderNumber"></p>
         <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Date: <span id="dateDisplay"></span></p>
         <p>Showtime: <span id="showtimeDisplay"></span></p>
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
@@ -105,6 +106,7 @@
         const showtime = params.get("showtime");
         const seats = params.get("seats");
         const total = parseFloat(params.get("total"));
+        const date = params.get("date");
         const seatCount = seats.split(",").length;
 
         const taxRate = 0.0775;
@@ -121,6 +123,12 @@
         document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
         document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
         document.getElementById("totalDisplay").textContent = "$" + total.toFixed(2);
+
+        if (date) {
+            const formatted = new Date(date + "T00:00:00");
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
+        }
     </script>
 
 </body>

@@ -78,6 +78,7 @@
 
     <div class="confirmation-box">
         <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Date: <span id="dateDisplay"></span></p>
         <p>Showtime: <span id="showtimeDisplay"></span></p>
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalDisplay"></span></p>
@@ -91,14 +92,22 @@
         const movie = params.get("movie");
         const showtime = params.get("showtime");
         const seats = params.get("seats");
+        const date = params.get("date");
 
         document.getElementById("movieDisplay").textContent = movie;
         document.getElementById("showtimeDisplay").textContent = showtime;
         document.getElementById("seatsDisplay").textContent = seats;
         document.getElementById("totalDisplay").textContent = seats.split(",").length + " seat(s)";
 
+        // Format the date nicely for display
+        if (date) {
+            const formatted = new Date(date + "T00:00:00");
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
+        }
+
         function goToPayment() {
-            window.location.href = "paymentpage.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats);
+            window.location.href = "paymentpage.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats) + "&date=" + encodeURIComponent(date);
         }
     </script>
 

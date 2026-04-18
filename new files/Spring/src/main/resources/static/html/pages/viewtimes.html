@@ -9,71 +9,75 @@
 <body>
     <h1 style="color: rgb(255, 255, 255);">Today's Movie Showtimes</h1>
     <p style="color: rgb(255, 255, 255);" id="todayDate"></p>
-
-<script>
-    const today = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById("todayDate").textContent = today.toLocaleDateString('en-US', options);
-</script>
+    <input type="date" id="movieDate" onchange="updateDate()" style="margin-bottom:20px; padding:8px; border-radius:8px; border:none; font-size:15px;">
 
     <div style="display:flex; flex-wrap:wrap; gap:20px; padding:20px;">
 
         <div style="background-color:white; border-radius:10px; width:200px; padding:15px; box-shadow:2px 2px 8px gray; text-align:center;">
             <img src="../images/movie1.png" alt="Dune Part Four" width="100%"><br>
             <h2 style="color: rgb(0, 0, 0);">Dune: Part Four</h2>
-            <p>2 HR 45 MIN | PG-13</p>
-            <p>Sci-Fi</p>
-            <p>10:15 AM &nbsp; 1:30 PM &nbsp; 4:45 PM &nbsp; 8:00 PM</p>
-            <a href="tickets.html?movie=Dune%3A%20Part%20Four&showtimes=10:15 AM,1:30 PM,4:45 PM,8:00 PM">
-                <button>Get Tickets</button>
-            </a>
+            <p style="color: rgb(0, 0, 0);">2 HR 45 MIN | PG-13</p>
+            <p style="color: rgb(0, 0, 0);">Sci-Fi</p>
+            <p style="color: rgb(0, 0, 0);">10:15 AM &nbsp; 1:30 PM &nbsp; 4:45 PM &nbsp; 8:00 PM</p>
+            <button onclick="goToTickets('Dune: Part Four', '10:15 AM,1:30 PM,4:45 PM,8:00 PM')">Get Tickets</button>
         </div>
 
         <div style="background-color:white; border-radius:10px; width:200px; padding:15px; box-shadow:2px 2px 8px gray; text-align:center;">
             <img src="../images/movie2.png" alt="Godzilla versus Batman" width="100%"><br>
             <h2 style="color: rgb(0, 0, 0);">Godzilla v. Batman</h2>
-            <p>1 HR 58 MIN | R</p>
-            <p>Thriller</p>
-            <p>11:00 AM &nbsp; 2:15 PM &nbsp; 7:30 PM</p>
-            <a href="tickets.html?movie=Godzilla%20v.%20Batman&showtimes=11:00 AM,2:15 PM,7:30 PM">
-                <button>Get Tickets</button>
-            </a>
+            <p style="color: rgb(0, 0, 0);">1 HR 58 MIN | R</p>
+            <p style="color: rgb(0, 0, 0);">Thriller</p>
+            <p style="color: rgb(0, 0, 0);">11:00 AM &nbsp; 2:15 PM &nbsp; 7:30 PM</p>
+            <button onclick="goToTickets('Godzilla v. Batman', '11:00 AM,2:15 PM,7:30 PM')">Get Tickets</button>
         </div>
 
         <div style="background-color:white; border-radius:10px; width:200px; padding:15px; box-shadow:2px 2px 8px gray; text-align:center;">
             <img src="../images/movie3.png" alt="Fart Wars" width="100%"><br>
             <h2 style="color: rgb(0, 0, 0);">Fart Wars</h2>
-            <p>2 HR 10 MIN | PG-13</p>
-            <p>Action</p>
-            <p>12:00 PM &nbsp; 3:30 PM &nbsp; 6:00 PM &nbsp; 9:15 PM</p>
-            <a href="tickets.html?movie=Fart%20Wars&showtimes=12:00 PM,3:30 PM,6:00 PM,9:15 PM">
-                <button>Get Tickets</button>
-            </a>
+            <p style="color: rgb(0, 0, 0);">2 HR 10 MIN | PG-13</p>
+            <p style="color: rgb(0, 0, 0);">Action</p>
+            <p style="color: rgb(0, 0, 0);">12:00 PM &nbsp; 3:30 PM &nbsp; 6:00 PM &nbsp; 9:15 PM</p>
+            <button onclick="goToTickets('Fart Wars', '12:00 PM,3:30 PM,6:00 PM,9:15 PM')">Get Tickets</button>
         </div>
 
         <div style="background-color:white; border-radius:10px; width:200px; padding:15px; box-shadow:2px 2px 8px gray; text-align:center;">
             <img src="../images/movie4.png" alt="Amogus" width="100%"><br>
             <h2 style="color: rgb(0, 0, 0);">Amogus</h2>
-            <p>1 HR 42 MIN | PG</p>
-            <p>Romance</p>
-            <p>11:30 AM &nbsp; 2:00 PM &nbsp; 4:30 PM &nbsp; 7:00 PM</p>
-            <a href="tickets.html?movie=Amogus&showtimes=11:30 AM,2:00 PM,4:30 PM,7:00 PM">
-                <button>Get Tickets</button>
-            </a>
+            <p style="color: rgb(0, 0, 0);">1 HR 42 MIN | PG</p>
+            <p style="color: rgb(0, 0, 0);">Romance</p>
+            <p style="color: rgb(0, 0, 0);">11:30 AM &nbsp; 2:00 PM &nbsp; 4:30 PM &nbsp; 7:00 PM</p>
+            <button onclick="goToTickets('Amogus', '11:30 AM,2:00 PM,4:30 PM,7:00 PM')">Get Tickets</button>
         </div>
 
         <div style="background-color:white; border-radius:10px; width:200px; padding:15px; box-shadow:2px 2px 8px gray; text-align:center;">
             <img src="../images/movie5.png" alt="67: The Movie" width="100%"><br>
             <h2 style="color: rgb(0, 0, 0);">67: The Movie</h2>
-            <p>6 HR 7 MIN | PG-67</p>
-            <p>Psychological Horror</p>
-            <p>6:07 PM &nbsp; 6:70 PM &nbsp; 67:67 PM</p>
-            <a href="tickets.html?movie=67%3A%20The%20Movie&showtimes=6:07 PM,6:70 PM,67:67 PM">
-                <button>Get Tickets</button>
-            </a>
+            <p style="color: rgb(0, 0, 0);">6 HR 7 MIN | PG-67</p>
+            <p style="color: rgb(0, 0, 0);">Psychological Horror</p>
+            <p style="color: rgb(0, 0, 0);">6:07 PM &nbsp; 6:70 PM &nbsp; 67:67 PM</p>
+            <button onclick="goToTickets('67: The Movie', '6:07 PM,6:70 PM,67:67 PM')">Get Tickets</button>
         </div>
 
     </div>
+
+    <script>
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("todayDate").textContent = today.toLocaleDateString('en-US', options);
+
+        const dateInput = document.getElementById("movieDate");
+        dateInput.valueAsDate = today;
+
+        function updateDate() {
+            const selected = new Date(dateInput.value + "T00:00:00");
+            document.getElementById("todayDate").textContent = selected.toLocaleDateString('en-US', options);
+        }
+
+        function goToTickets(movie, showtimes) {
+            const date = dateInput.value;
+            window.location.href = "tickets.html?movie=" + encodeURIComponent(movie) + "&showtimes=" + encodeURIComponent(showtimes) + "&date=" + encodeURIComponent(date);
+        }
+    </script>
 
 </body>
 </html>

@@ -236,7 +236,8 @@
         }
 
         const seats = selectedSeats.join(",");
-        window.location.href = "seatconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(selectedShowtime) + "&seats=" + encodeURIComponent(seats);
+        const date = params.get("date");
+        window.location.href = "seatconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(selectedShowtime) + "&seats=" + encodeURIComponent(seats) + "&date=" + encodeURIComponent(date);
     }
 
         renderSeats();
