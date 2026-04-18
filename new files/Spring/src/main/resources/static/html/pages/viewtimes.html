@@ -9,7 +9,7 @@
 <body>
     <h1 style="color: rgb(255, 255, 255);">Today's Movie Showtimes</h1>
     <p style="color: rgb(255, 255, 255);" id="todayDate"></p>
-    <input type="date" id="movieDate" onchange="updateDate()" style="margin-bottom:20px; padding:8px; border-radius:8px; border:none; font-size:15px;">
+    <input type="date" id="movieDate" onchange="updateDate()" min="" style="margin-bottom:20px; padding:8px; border-radius:8px; border:none; font-size:15px;">
 
     <div style="display:flex; flex-wrap:wrap; gap:20px; padding:20px;">
 
@@ -67,6 +67,7 @@
 
         const dateInput = document.getElementById("movieDate");
         dateInput.valueAsDate = today;
+        dateInput.min = today.toISOString().split("T")[0]; // add it here
 
         function updateDate() {
             const selected = new Date(dateInput.value + "T00:00:00");
