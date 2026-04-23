@@ -54,7 +54,7 @@ h3 {
 }
 
 /*All paragraphs use Light Kanit*/
-p, p1, p2, p3 {
+p {
     color: var(--text-color);
     font-family: "Kanit", sans-serif;
     font-weight: 300;
@@ -139,6 +139,7 @@ header{
 
 .push_center{
     margin: 0 auto;
+    align-items: center;
 }
 
 .logo{
@@ -255,5 +256,43 @@ th, td{
     color : var(--text-color);
     padding: 12px;
     border: var(--butter-yellow) 1px solid;
-    box-shadow: inset 0 0 0 1px var(--butter-yellow);
+}
+
+.textbox{
+    width: 50%;
+    padding: 14px;
+    border: 2px solid var(--butter-yellow);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: "Kanit", sans-serif;
+    transition: all 0.3s ease;
+    text-align: center;
+    flex-grow: initial;
+    margin: 0 auto;
+}
+.stat {
+    margin-top: 3em;
+    color: var(--butter-yellow);
+    background: #111; border: 1px solid var(--butter-yellow); border-radius: 10px;
+    padding: 22px 16px; text-align: center; transition: all 0.25s; cursor: pointer;
+    width: 25%;
+    
+}
+.stat::before {
+    height: 2px; background: var(--movie-red); transform: scaleX(0);
+    transition: transform 0.25s; transform-origin: left;
+}
+.stat:hover {
+    border-color: var(--butter-yellow);
+    background: var(--base-color);
+    box-shadow: 0 0 20px var(--butter-yellow), 0 4px 40px rgba(0,0,0,0.6);
+}
+.stat:hover::before { transform: scaleX(1); }
+.stat .lbl { color: var(--butter-yellow); }
+
+.row{
+    margin-top: 1em;
+    display: flex;
+    gap: 1.5em;
+    width: 100%;
 }

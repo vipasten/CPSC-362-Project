@@ -1,3 +1,17 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "cSpell.words": [
+        "Amogus",
+        "Bubalo",
+        "CPSC",
+        "CSUF",
+        "Damir",
+        "Dzanh",
+        "Pasten",
+        "Showtimes",
+        "springframework",
+        "thymeleaf",
+        "Vierna",
+        "viewmembership"
+    ]
 }
