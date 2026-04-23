@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import java.util.List;
 
 @Controller
 public class AuthController {
@@ -51,5 +53,13 @@ public class AuthController {
 		}
 
 		return "redirect:/html/pages/login.html?error=invalid-credentials";
+	}
+
+	@GetMapping("/viewmembership")
+	public String viewUsers(@RequestParam(required = false) String search, Model model) {
+		List<UserAccount> users = authService.searchUsers(search);
+		model.addAttribute("users", users);
+		model.addAttribute("searchQuery", search != null ? search : "");
+		return "viewmembership";
 	}
 }

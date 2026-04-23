@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,9 @@ public class UserAccount {
 
 	@Column(nullable = false)
 	private String passwordHash;
+
+	@Column(nullable = true)
+	private LocalDateTime signupDate;
 
 	public UserAccount() {}
 
@@ -63,5 +67,13 @@ public class UserAccount {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+
+	public LocalDateTime getSignupDate() {
+		return signupDate;
+	}
+
+	public void setSignupDate(LocalDateTime signupDate) {
+		this.signupDate = signupDate;
 	}
 }
