@@ -29,6 +29,9 @@ public class UserAccount {
 	private String passwordHash;
 
 	@Column(nullable = true)
+	private String role;
+
+	@Column(nullable = true)
 	private LocalDateTime signupDate;
 
 	public UserAccount() {}
@@ -53,6 +56,10 @@ public class UserAccount {
 		return passwordHash;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -67,6 +74,10 @@ public class UserAccount {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public LocalDateTime getSignupDate() {

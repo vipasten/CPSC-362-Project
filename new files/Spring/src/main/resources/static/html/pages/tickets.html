@@ -177,7 +177,7 @@
         const rows = ["A", "B", "C", "D", "E"];
         const seatsPerRow = 8;
 
-        const takenSeats = [];
+        let takenSeats = [];
         let selectedSeats = [];
         let selectedShowtime = null;
 
@@ -215,14 +215,40 @@
             renderSeats();
         }
 
-        function selectShowtime(button, time) {
+        async function selectShowtime(button, time) {
             selectedShowtime = time;
+            selectedSeats = [];
 
             document.querySelectorAll(".showtime-btn").forEach(btn => {
                 btn.classList.remove("selected-time");
             });
 
             button.classList.add("selected-time");
+            await loadTakenSeats(time);
+            renderSeats();
+        }
+
+        async function loadTakenSeats(showtime) {
+            if (!movie || !showtime) {
+                takenSeats = [];
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    "/api/seats/taken?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime)
+                );
+
+                if (!response.ok) {
+                    takenSeats = [];
+                    return;
+                }
+
+                const data = await response.json();
+                takenSeats = Array.isArray(data.takenSeats) ? data.takenSeats : [];
+            } catch (error) {
+                takenSeats = [];
+            }
         }
 
     function goToConfirmation() {
@@ -237,7 +263,11 @@
 
         const seats = selectedSeats.join(",");
         const date = params.get("date");
-        window.location.href = "seatconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(selectedShowtime) + "&seats=" + encodeURIComponent(seats) + "&date=" + encodeURIComponent(date);
+        window.location.href =
+            "seatconfirmation.html?movie=" + encodeURIComponent(movie) +
+            "&showtime=" + encodeURIComponent(selectedShowtime) +
+            "&seats=" + encodeURIComponent(seats) +
+            "&date=" + encodeURIComponent(date || "");
     }
 
         renderSeats();
@@ -246,13 +276,18 @@
         const showtimeList = showtimesParam ? showtimesParam.split(",") : [];
         const showtimeContainer = document.getElementById("showtimeButtons");
 
-        showtimeList.forEach(time => {
-        const btn = document.createElement("button");
-        btn.className = "showtime-btn";
-        btn.textContent = time.trim();
-        btn.onclick = function() { selectShowtime(btn, time.trim()); };
-        showtimeContainer.appendChild(btn);
-}); 
+        showtimeList.forEach((time, index) => {
+            const cleanTime = time.trim();
+            const btn = document.createElement("button");
+            btn.className = "showtime-btn";
+            btn.textContent = cleanTime;
+            btn.onclick = function() { selectShowtime(btn, cleanTime); };
+            showtimeContainer.appendChild(btn);
+
+            if (index === 0) {
+                selectShowtime(btn, cleanTime);
+            }
+        });
     </script>
 
 </body>

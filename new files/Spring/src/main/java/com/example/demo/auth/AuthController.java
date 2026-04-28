@@ -46,9 +46,15 @@ public class AuthController {
 		@RequestParam String password
 	) {
 		String userName = username.trim();
-		boolean loggedIn = authService.login(userName, password);
+		String role = authService.loginAndGetRole(userName, password);
 
-		if (loggedIn) {
+		if ("ADMIN".equals(role)) {
+			return "redirect:/html/pages/adminhomepage.html?login=success";
+		}
+		if ("EMPLOYEE".equals(role)) {
+			return "redirect:/html/pages/employeehomepage.html?login=success";
+		}
+		if ("MEMBER".equals(role)) {
 			return "redirect:/html/index.html?login=success";
 		}
 

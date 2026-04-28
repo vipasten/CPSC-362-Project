@@ -184,7 +184,8 @@
         const showtime = params.get("showtime");
         const seats = params.get("seats");
         const date = params.get("date");
-        const seatCount = seats.split(",").length;
+        const seatList = seats ? seats.split(",").map(seat => seat.trim()).filter(seat => seat.length > 0) : [];
+        const seatCount = seatList.length;
 
         const pricePerSeat = 12.99;
         const subtotal = seatCount * pricePerSeat;
@@ -194,7 +195,7 @@
 
         document.getElementById("movieDisplay").textContent = movie;
         document.getElementById("showtimeDisplay").textContent = showtime;
-        document.getElementById("seatsDisplay").textContent = seats;
+        document.getElementById("seatsDisplay").textContent = seatList.join(", ");
         document.getElementById("totalSeatsDisplay").textContent = seatCount + " seat(s)";
         document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
         document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
@@ -220,7 +221,7 @@
             this.value = value;
         });
 
-        function processPayment() {
+        async function processPayment() {
             const cardName = document.getElementById("cardName").value;
             const cardNumber = document.getElementById("cardNumber").value;
             const expiry = document.getElementById("expiry").value;
@@ -260,8 +261,46 @@
             return;
         }
 
-            // Yo Milan! I trust you with this! This is where I'm hoping you can use what you got from your backend side to help save the order
-            window.location.href = "paymentconfirmation.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats) + "&total=" + encodeURIComponent(totalPrice.toFixed(2)) + "&date=" + encodeURIComponent(date);
+        if (!movie || !showtime || seatList.length === 0) {
+            alert("Missing booking information. Please pick your seats again.");
+            window.location.href = "viewtimes.html";
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/seats/purchase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    movie: movie,
+                    showtime: showtime,
+                    seats: seatList
+                })
+            });
+
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                const conflicts = Array.isArray(result.conflicts) ? result.conflicts.join(", ") : "Unknown seats";
+                alert("Some seats are already purchased: " + conflicts + ". Please reselect seats.");
+                window.location.href =
+                    "tickets.html?movie=" + encodeURIComponent(movie) +
+                    "&showtimes=" + encodeURIComponent(showtime) +
+                    "&date=" + encodeURIComponent(date || "");
+                return;
+            }
+        } catch (error) {
+            alert("Could not complete purchase right now. Please try again.");
+            return;
+        }
+
+        window.location.href =
+            "paymentconfirmation.html?movie=" + encodeURIComponent(movie) +
+            "&showtime=" + encodeURIComponent(showtime) +
+            "&seats=" + encodeURIComponent(seatList.join(",")) +
+            "&total=" + encodeURIComponent(totalPrice.toFixed(2)) +
+            "&date=" + encodeURIComponent(date || "");
         }
     </script>
 
