@@ -170,6 +170,7 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const movie = params.get("movie");
+        const date = params.get("date");
         document.getElementById("movieTitle").textContent = movie ? movie : "No movie selected";
 
         const seatLayout = document.getElementById("seatLayout");
@@ -236,7 +237,9 @@
 
             try {
                 const response = await fetch(
-                    "/api/seats/taken?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime)
+                    "/api/seats/taken?movie=" + encodeURIComponent(movie) +
+                    "&showtime=" + encodeURIComponent(showtime) +
+                    "&date=" + encodeURIComponent(date || "")
                 );
 
                 if (!response.ok) {
@@ -262,7 +265,6 @@
         }
 
         const seats = selectedSeats.join(",");
-        const date = params.get("date");
         window.location.href =
             "seatconfirmation.html?movie=" + encodeURIComponent(movie) +
             "&showtime=" + encodeURIComponent(selectedShowtime) +
