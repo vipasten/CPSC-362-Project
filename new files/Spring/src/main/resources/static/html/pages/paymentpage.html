@@ -276,11 +276,12 @@
                 body: JSON.stringify({
                     movie: movie,
                     showtime: showtime,
+                    date: date || "",
                     seats: seatList
                 })
             });
 
-            const result = await response.json();
+            const result = await response.json().catch(() => ({}));
             if (!response.ok || !result.success) {
                 const conflicts = Array.isArray(result.conflicts) ? result.conflicts.join(", ") : "Unknown seats";
                 alert("Some seats are already purchased: " + conflicts + ". Please reselect seats.");
