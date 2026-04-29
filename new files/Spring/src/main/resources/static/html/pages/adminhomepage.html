@@ -9,8 +9,16 @@
 
     <body>
         <li class="push_center" style="height: 50px; width: 500px;">
-                        <img src="../images/Logo (1).png" alt="Movie Theater Logo">
+            <img src="../images/Logo (1).png" alt="Movie Theater Logo">
         </li>
+
+        <div style="position: fixed; bottom: 20px; right: 20px;">
+            <a href="login.html">
+                <button style="padding: 10px 20px; border-radius: 8px; background-color: #ab191ecd; color: white; border: none; font-size: 14px; cursor: pointer;">
+                    Sign Out
+                </button>
+            </a>
+        </div>
 
         <div class="textbox" style="margin-top: 100px;">
             <h1>Admin Home Page</h1>
@@ -20,11 +28,29 @@
                 PASSWORD!
             </p>
         </div>
-        <div class = "row">
-            <div class="stat"><div class="lbl"><a href = "/viewmembership">VIEW MEMBERS</a></div></div>
-            <div class="stat"><div class="lbl">OPEN TICKETS</div></div>
-            <div class="stat"><div class="lbl">REFUNDS</div></div>
-            <div class="stat"><div class="lbl">PROMOS</div></div>
+
+        <div style="display: flex; gap: 1.5em; margin-top: 3em; width: 100%;">
+            <a href="/viewmembership" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">VIEW MEMBERS</div>
+                </div>
+            </a>
+            <a href="opentickets.html" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">OPEN TICKETS</div>
+                </div>
+            </a>
+            <a href="refunds.html" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">REFUNDS</div>
+                </div>
+            </a>
+            <a href="promos.html" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">PROMOS</div>
+                </div>
+            </a>
         </div>
+
     </body>
 </html>

@@ -94,6 +94,7 @@
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
         <p>Subtotal: <span id="subtotalDisplay"></span></p>
+        <p id="discountLine" style="display:none;">Discount (<span id="discountPct"></span>% off): <span style="color:#4caf50; font-weight:bold;" id="discountDisplay"></span></p>
         <p>Tax (7.75% CA): <span id="taxDisplay"></span></p>
         <p class="total-line"> Total Paid: <span id="totalDisplay"></span></p>
 
@@ -107,11 +108,15 @@
         const seats = params.get("seats");
         const total = parseFloat(params.get("total"));
         const date = params.get("date");
-        const seatCount = seats.split(",").length;
+        const discount = parseFloat(params.get("discount") || "0");
 
+        const seatCount = seats ? seats.split(",").length : 0;
+        const pricePerSeat = 12.99;
         const taxRate = 0.0775;
-        const subtotal = total / (1 + taxRate);
-        const tax = total - subtotal;
+        const originalSubtotal = seatCount * pricePerSeat;
+        const discountAmount = originalSubtotal * (discount / 100);
+        const discountedSubtotal = originalSubtotal - discountAmount;
+        const tax = discountedSubtotal * taxRate;
 
         const orderNumber = "ORD-" + Math.floor(Math.random() * 900000 + 100000);
 
@@ -120,7 +125,7 @@
         document.getElementById("showtimeDisplay").textContent = showtime;
         document.getElementById("seatsDisplay").textContent = seats;
         document.getElementById("totalSeatsDisplay").textContent = seatCount + " seat(s)";
-        document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
+        document.getElementById("subtotalDisplay").textContent = "$" + originalSubtotal.toFixed(2);
         document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
         document.getElementById("totalDisplay").textContent = "$" + total.toFixed(2);
 
@@ -128,6 +133,12 @@
             const formatted = new Date(date + "T00:00:00");
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
+        }
+
+        if (discount > 0) {
+            document.getElementById("discountLine").style.display = "block";
+            document.getElementById("discountPct").textContent = discount;
+            document.getElementById("discountDisplay").textContent = "-$" + discountAmount.toFixed(2);
         }
     </script>
 

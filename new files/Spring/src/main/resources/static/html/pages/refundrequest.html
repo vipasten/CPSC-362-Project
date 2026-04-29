@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Request</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .forms {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .forms h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .forms label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .forms input, .forms textarea, .forms select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .forms textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .forms select option {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #8a1015;
+        }
+
+        .back-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            width: 100%;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="listing">
+        <button>
+            <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+        </button>
+        <button>
+            <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
+        </button>
+        <button>
+            <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+        </button>
+    </div>
+
+    <h1>Request thy Refund</h1>
+    <p>Fill out the form below and our super amazing and amazingly super team will review your request.</p>
+
+    <div class="forms">
+        <h1>Refund thy Request Form</h1>
+
+        <!-- Milan mah boi, hook this form up to a POST /refund endpoint to save to database -->
+        <form action="/refund" method="post">
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" placeholder="John" required>
+
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" placeholder="Doe" required>
+
+            <label for="orderNumber">Order Number:</label>
+            <input type="text" id="orderNumber" name="orderNumber" placeholder="ORD-123456" required>
+
+            <label for="movie">Movie:</label>
+            <input type="text" id="movie" name="movie" placeholder="e.g. Fart Wars" required>
+
+            <label for="reason">Reason for Refund:</label>
+            <select id="reason" name="reason" required>
+                <option value="" disabled selected>Select a reason</option>
+                <option value="Wrong seats">Wrong seats booked</option>
+                <option value="Duplicate purchase">Duplicate purchase</option>
+                <option value="Event cancelled">Event cancelled</option>
+                <option value="Unable to attend">Unable to attend</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="details">Additional Details:</label>
+            <textarea id="details" name="details" placeholder="Provide any extra details here..."></textarea>
+
+            <button class="submit-btn" type="submit">Submit Refund Request</button>
+            <button class="back-btn" type="button" onclick="history.back()">Go Back</button>
+        </form>
+    </div>
+
+</body>
+</html>

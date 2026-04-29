@@ -275,7 +275,6 @@ th, td{
     color: var(--butter-yellow);
     background: #111; border: 1px solid var(--butter-yellow); border-radius: 10px;
     padding: 22px 16px; text-align: center; transition: all 0.25s; cursor: pointer;
-    width: 25%;
     
 }
 .stat::before {

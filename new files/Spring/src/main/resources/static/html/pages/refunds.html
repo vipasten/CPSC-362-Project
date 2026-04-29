@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refunds</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .refund-table {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .refund-table th {
+            background-color: #ab191ecd;
+            color: white;
+            padding: 12px 15px;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .refund-table td {
+            padding: 12px 15px;
+            font-size: 14px;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            word-break: break-word;
+        }
+
+        .refund-table tr {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .refund-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .approve-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #4caf50;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .approve-btn:hover {
+            background: #388e3c;
+        }
+
+        .deny-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+        }
+
+        .deny-btn:hover {
+            background: #8a1015;
+        }
+
+        .status-pending {
+            color: #FFE96B;
+            font-weight: bold;
+        }
+
+        .status-approved {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .status-denied {
+            color: #e05252;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Refund Requests</h1>
+    <p>Review and process refund requests submitted by users.</p>
+
+    <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
+
+    <!-- Yo Milan, if you see this, try hook this part up to your backend endpoint that returns all refund requests -->
+    <!-- Replace placeholder rows with th:each from Thymeleaf like in viewmembership.html -->
+    <!-- Approve/Deny buttons should POST to an endpoint like /refund/approve?id=1 or /refund/deny?id=1 -->
+
+    <table class="refund-table">
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Order #</th>
+            <th>Movie</th>
+            <th>Reason</th>
+            <th>Details</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        <!-- Placeholder rows -->
+        <tr>
+            <td>1</td>
+            <td>Poopy</td>
+            <td>John</td>
+            <td>ORD-482910</td>
+            <td>Fart Wars</td>
+            <td>Unable to attend</td>
+            <td>Something came up last minute. My people needed me.</td>
+            <td>04/25/2026</td>
+            <td><span class="status-pending">Pending</span></td>
+            <td>
+                <button class="approve-btn">Approve</button>
+                <button class="deny-btn">Deny</button>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Jesus</td>
+            <td>Christ</td>
+            <td>ORD-391827</td>
+            <td>Amogus</td>
+            <td>Impostor sus.</td>
+            <td>The impostor was too sus!</td>
+            <td>04/26/2026</td>
+            <td><span class="status-pending">Pending</span></td>
+            <td>
+                <button class="approve-btn">Approve</button>
+                <button class="deny-btn">Deny</button>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Bat</td>
+            <td>Man</td>
+            <td>ORD-573819</td>
+            <td>Godzilla v. Batman</td>
+            <td>Parents murdered in alleway.</td>
+            <td>Yo, brother. Just as I exited the movie, my mum and dad got shot in like the alleyway, yo. Please refund me money. I need therapy.</td>
+            <td>04/27/2026</td>
+            <td><span class="status-approved">Approved</span></td>
+            <td>
+                <button class="approve-btn">Approve</button>
+                <button class="deny-btn">Deny</button>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

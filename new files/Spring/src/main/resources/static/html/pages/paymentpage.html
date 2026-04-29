@@ -49,6 +49,10 @@
             font-weight: bold;
         }
 
+        .order-summary span.discount {
+            color: #4caf50;
+        }
+
         .payment-form {
             background-color: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -99,6 +103,49 @@
             flex: 1;
         }
 
+        .promo-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .promo-row input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .promo-row input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .apply-btn {
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            white-space: nowrap;
+        }
+
+        .apply-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .promo-msg {
+            font-size: 13px;
+            margin-bottom: 10px;
+            min-height: 18px;
+        }
+
         .pay-btn {
             margin-top: 10px;
             padding: 14px 32px;
@@ -146,12 +193,22 @@
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
         <p>Subtotal: <span id="subtotalDisplay"></span></p>
+        <p id="discountLine" style="display:none;">Discount (<span id="discountPct"></span>% off): <span class="discount" id="discountDisplay"></span></p>
         <p>Tax (7.75% CA): <span id="taxDisplay"></span></p>
         <p class="total-line">Total: <span id="totalDisplay"></span></p>
     </div>
 
     <div class="payment-form">
         <h2>Card Details</h2>
+
+        <div class="form-group">
+            <label>Promo Code (optional)</label>
+            <div class="promo-row">
+                <input type="text" id="promoCode" placeholder="Enter promo code">
+                <button class="apply-btn" onclick="applyPromo()">Apply</button>
+            </div>
+            <p class="promo-msg" id="promoMsg"></p>
+        </div>
 
         <div class="form-group">
             <label for="cardName">Name on Card</label>
@@ -190,21 +247,71 @@
         const pricePerSeat = 12.99;
         const subtotal = seatCount * pricePerSeat;
         const taxRate = 0.0775;
-        const tax = subtotal * taxRate;
-        const totalPrice = subtotal + tax;
+
+        let discountPercent = 0;
+
+        function recalculate() {
+            const discountAmount = subtotal * (discountPercent / 100);
+            const discountedSubtotal = subtotal - discountAmount;
+            const tax = discountedSubtotal * taxRate;
+            const totalPrice = discountedSubtotal + tax;
+
+            document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
+            document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
+            document.getElementById("totalDisplay").textContent = "$" + totalPrice.toFixed(2);
+
+            if (discountPercent > 0) {
+                document.getElementById("discountLine").style.display = "block";
+                document.getElementById("discountPct").textContent = discountPercent;
+                document.getElementById("discountDisplay").textContent = "-$" + discountAmount.toFixed(2);
+            } else {
+                document.getElementById("discountLine").style.display = "none";
+            }
+
+            return totalPrice;
+        }
 
         document.getElementById("movieDisplay").textContent = movie;
         document.getElementById("showtimeDisplay").textContent = showtime;
         document.getElementById("seatsDisplay").textContent = seatList.join(", ");
         document.getElementById("totalSeatsDisplay").textContent = seatCount + " seat(s)";
-        document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
-        document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
-        document.getElementById("totalDisplay").textContent = "$" + totalPrice.toFixed(2);
+        recalculate();
 
         if (date) {
             const formatted = new Date(date + "T00:00:00");
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
+        }
+
+        // Milan: replace testPromoCodes with a real fetch to /api/promo/validate?code=XXX
+        // For now using hardcoded test codes so the frontend works visually
+        const testPromoCodes = {
+            "SUMMER20": 20,
+            "FARTW10": 10,
+            "AMOGUS50": 50
+        };
+
+        function applyPromo() {
+            const code = document.getElementById("promoCode").value.trim().toUpperCase();
+            const msgEl = document.getElementById("promoMsg");
+
+            if (!code) {
+                msgEl.style.color = "#e05252";
+                msgEl.textContent = "Please enter a promo code!";
+                return;
+            }
+
+            if (testPromoCodes[code]) {
+                discountPercent = testPromoCodes[code];
+                msgEl.style.color = "#4caf50";
+                msgEl.textContent = "Promo code applied! " + discountPercent + "% off!";
+                recalculate();
+            } else {
+                discountPercent = 0;
+                msgEl.style.color = "#e05252";
+                msgEl.textContent = "Invalid or expired promo code.";
+                recalculate();
+            }
         }
 
         document.getElementById("cardNumber").addEventListener("input", function() {
@@ -296,12 +403,14 @@
             return;
         }
 
+        const finalTotal = recalculate();
         window.location.href =
             "paymentconfirmation.html?movie=" + encodeURIComponent(movie) +
             "&showtime=" + encodeURIComponent(showtime) +
             "&seats=" + encodeURIComponent(seatList.join(",")) +
-            "&total=" + encodeURIComponent(totalPrice.toFixed(2)) +
-            "&date=" + encodeURIComponent(date || "");
+            "&total=" + encodeURIComponent(finalTotal.toFixed(2)) +
+            "&date=" + encodeURIComponent(date || "") +
+            "&discount=" + encodeURIComponent(discountPercent);
         }
     </script>
 

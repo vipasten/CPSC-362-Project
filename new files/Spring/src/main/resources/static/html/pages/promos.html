@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promos</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .create-form {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .create-form h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .create-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .create-form input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .create-form input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .submit-btn:hover {
+            background: #8a1015;
+        }
+
+        .promo-table {
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .promo-table th {
+            background-color: #ab191ecd;
+            color: white;
+            padding: 12px 15px;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .promo-table td {
+            padding: 12px 15px;
+            font-size: 14px;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .promo-table tr {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .promo-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #8a1015;
+        }
+
+        .back-btn {
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Promo Codes</h1>
+    <p>Create and manage discount codes for users.</p>
+
+    <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
+
+    <div class="create-form">
+        <h2>Create New Promo Code</h2>
+
+        <!-- Milan: hook this up to POST /promo endpoint to save to database -->
+        <form action="/promo" method="post">
+            <label for="promoCode">Promo Code:</label>
+            <input type="text" id="promoCode" name="promoCode" placeholder="e.g. SUMMER20" required>
+
+            <label for="discount">Discount Percentage (%):</label>
+            <input type="number" id="discount" name="discount" placeholder="e.g. 20" min="1" max="100" required>
+
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="date" id="expiryDate" name="expiryDate" required>
+
+            <button class="submit-btn" type="submit">Create Promo Code</button>
+        </form>
+    </div>
+
+    <h2>Existing Promo Codes</h2>
+
+    <!-- MILAN!! you should replace placeholder rows with th:each from Thymeleaf like in viewmembership.html -->
+    <!-- Delete button should be posted to /promo/delete?id=1 -->
+     
+    <table class="promo-table">
+        <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Discount</th>
+            <th>Expiry Date</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>SUMMER20</td>
+            <td>20%</td>
+            <td>06/30/2026</td>
+            <td><button class="delete-btn">Delete</button></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>FARTwars10</td>
+            <td>10%</td>
+            <td>05/15/2026</td>
+            <td><button class="delete-btn">Delete</button></td>
+        </tr>
+    </table>
+
+</body>
+</html>
