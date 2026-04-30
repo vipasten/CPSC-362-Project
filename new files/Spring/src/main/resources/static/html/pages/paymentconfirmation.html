@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Confirmation</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -14,11 +15,13 @@
             margin: 0;
         }
 
+        /* Large checkmark emoji displayed at the top */
         .checkmark {
             font-size: 60px;
             margin-bottom: 10px;
         }
 
+        /* Dark rounded receipt box */
         .receipt {
             background-color: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -28,6 +31,7 @@
             text-align: left;
         }
 
+        /* Green title inside the receipt box */
         .receipt h2 {
             text-align: center;
             margin-top: 0;
@@ -35,6 +39,7 @@
             color: #4caf50;
         }
 
+        /* Each line item in the receipt */
         .receipt p {
             font-size: 16px;
             margin: 12px 0;
@@ -43,17 +48,20 @@
             padding-bottom: 10px;
         }
 
+        /* Bold total paid line at the bottom */
         .receipt p.total-line {
             font-size: 18px;
             font-weight: bold;
             border-bottom: none;
         }
 
+        /* Yellow highlight for data values */
         .receipt span {
             color: #FFE96B;
             font-weight: bold;
         }
 
+        /* Subtle order number display */
         .order-number {
             text-align: center;
             font-size: 13px;
@@ -61,6 +69,7 @@
             margin-bottom: 20px;
         }
 
+        /* Red button to return to the home page */
         .home-btn {
             margin-top: 25px;
             padding: 14px 32px;
@@ -81,27 +90,38 @@
 </head>
 <body>
 
+    <!-- Success checkmark and confirmation message -->
     <div class="checkmark">✅</div>
     <h1>Payment Confirmed!</h1>
     <p>Wow, can't believe you actually bought tickets to a movie that doesn't exist. Thanks for your card information we guess? We're definitely buying a lot of chicken nuggies with it!</p>
 
+    <!-- Receipt box showing the full order summary -->
     <div class="receipt">
         <h2>Your Receipt</h2>
+
+        <!-- Randomly generated order number displayed at the top of the receipt -->
         <p class="order-number" id="orderNumber"></p>
+
+        <!-- All receipt fields filled in dynamically by JavaScript -->
         <p>Movie: <span id="movieDisplay"></span></p>
         <p>Date: <span id="dateDisplay"></span></p>
         <p>Showtime: <span id="showtimeDisplay"></span></p>
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
         <p>Subtotal: <span id="subtotalDisplay"></span></p>
+
+        <!-- Discount line only shown if a promo code was used -->
         <p id="discountLine" style="display:none;">Discount (<span id="discountPct"></span>% off): <span style="color:#4caf50; font-weight:bold;" id="discountDisplay"></span></p>
+
         <p>Tax (7.75% CA): <span id="taxDisplay"></span></p>
         <p class="total-line"> Total Paid: <span id="totalDisplay"></span></p>
 
+        <!-- Button to return to the homepage -->
         <button class="home-btn" onclick="window.location.href='../index.html'">Back to Home</button>
     </div>
 
     <script>
+        // Read all order details passed through the URL from paymentpage.html
         const params = new URLSearchParams(window.location.search);
         const movie = params.get("movie");
         const showtime = params.get("showtime");
@@ -110,16 +130,23 @@
         const date = params.get("date");
         const discount = parseFloat(params.get("discount") || "0");
 
+        // Count total seats from the comma-separated seats string
         const seatCount = seats ? seats.split(",").length : 0;
+
+        // Pricing constants - must match paymentpage.html
         const pricePerSeat = 12.99;
         const taxRate = 0.0775;
+
+        // Recalculate all price breakdowns from scratch using seat count and discount
         const originalSubtotal = seatCount * pricePerSeat;
         const discountAmount = originalSubtotal * (discount / 100);
         const discountedSubtotal = originalSubtotal - discountAmount;
         const tax = discountedSubtotal * taxRate;
 
+        // Generate a random order number for display purposes
         const orderNumber = "ORD-" + Math.floor(Math.random() * 900000 + 100000);
 
+        // Fill in all receipt fields
         document.getElementById("orderNumber").textContent = "Order #: " + orderNumber;
         document.getElementById("movieDisplay").textContent = movie;
         document.getElementById("showtimeDisplay").textContent = showtime;
@@ -129,12 +156,14 @@
         document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
         document.getElementById("totalDisplay").textContent = "$" + total.toFixed(2);
 
+        // Format and display the date nicely (e.g. "Wednesday, April 30, 2026")
         if (date) {
             const formatted = new Date(date + "T00:00:00");
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
         }
 
+        // Show the discount line only if a promo code was applied
         if (discount > 0) {
             document.getElementById("discountLine").style.display = "block";
             document.getElementById("discountPct").textContent = discount;

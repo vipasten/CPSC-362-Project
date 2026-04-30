@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refund Request</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -14,6 +15,7 @@
             margin: 0;
         }
 
+        /* Dark rounded box containing the refund form */
         .forms {
             background-color: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -30,6 +32,7 @@
             font-size: 22px;
         }
 
+        /* Label styling for each form field */
         .forms label {
             display: block;
             margin-bottom: 6px;
@@ -37,6 +40,7 @@
             color: rgba(255,255,255,0.7);
         }
 
+        /* Dark styled input, textarea, and select fields */
         .forms input, .forms textarea, .forms select {
             width: 100%;
             padding: 10px;
@@ -49,16 +53,19 @@
             margin-bottom: 15px;
         }
 
+        /* Textarea height for the details field */
         .forms textarea {
             height: 100px;
             resize: vertical;
         }
 
+        /* Dark background for dropdown options */
         .forms select option {
             background-color: #1a1a1a;
             color: white;
         }
 
+        /* Red submit button */
         .submit-btn {
             width: 100%;
             padding: 14px;
@@ -76,6 +83,7 @@
             background: #8a1015;
         }
 
+        /* Transparent go back button */
         .back-btn {
             margin-top: 12px;
             padding: 12px 28px;
@@ -95,38 +103,51 @@
 </head>
 <body>
 
+    <!-- Navigation bar with icon buttons linking to other pages -->
     <div class="listing">
+        <!-- Home button -->
         <button>
             <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
         </button>
+        <!-- View Showtimes button -->
         <button>
             <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
         </button>
+        <!-- Support Ticket button -->
         <button>
             <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
         </button>
     </div>
 
+    <!-- Page title and subtitle -->
     <h1>Request thy Refund</h1>
     <p>Fill out the form below and our super amazing and amazingly super team will review your request.</p>
 
+    <!-- Refund request form container -->
     <div class="forms">
         <h1>Refund thy Request Form</h1>
 
-        <!-- Milan mah boi, hook this form up to a POST /refund endpoint to save to database -->
+        <!-- Form submits a POST request to the /refund endpoint -->
+        <!-- TODO: Need to build the /refund endpoint to save requests to the database -->
         <form action="/refund" method="post">
+
+            <!-- First name input -->
             <label for="fname">First Name:</label>
             <input type="text" id="fname" name="fname" placeholder="John" required>
 
+            <!-- Last name input -->
             <label for="lname">Last Name:</label>
             <input type="text" id="lname" name="lname" placeholder="Doe" required>
 
+            <!-- Order number so admin can identify which purchase to refund -->
             <label for="orderNumber">Order Number:</label>
             <input type="text" id="orderNumber" name="orderNumber" placeholder="ORD-123456" required>
 
+            <!-- Movie name associated with the order -->
             <label for="movie">Movie:</label>
             <input type="text" id="movie" name="movie" placeholder="e.g. Fart Wars" required>
 
+            <!-- Dropdown to select the reason for the refund -->
             <label for="reason">Reason for Refund:</label>
             <select id="reason" name="reason" required>
                 <option value="" disabled selected>Select a reason</option>
@@ -137,11 +158,16 @@
                 <option value="Other">Other</option>
             </select>
 
+            <!-- Optional additional details textarea -->
             <label for="details">Additional Details:</label>
             <textarea id="details" name="details" placeholder="Provide any extra details here..."></textarea>
 
+            <!-- Submit button sends the form to the backend -->
             <button class="submit-btn" type="submit">Submit Refund Request</button>
+
+            <!-- Go back button returns to the previous page without submitting -->
             <button class="back-btn" type="button" onclick="history.back()">Go Back</button>
+
         </form>
     </div>
 

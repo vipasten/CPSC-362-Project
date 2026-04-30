@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Seats</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -14,6 +15,7 @@
             margin: 0;
         }
 
+        /* Container that holds both the showtime panel and the seat layout side by side */
         .booking-container {
             position: relative;
             max-width: 1200px;
@@ -21,6 +23,7 @@
             min-height: 700px;
         }
 
+        /* Panel on the left side showing available showtimes */
         .showtime-panel {
             position: absolute;
             left: 0;
@@ -38,6 +41,7 @@
             font-size: 18px;
         }
 
+        /* Individual showtime button styling */
         .showtime-btn {
             display: block;
             width: 100%;
@@ -52,11 +56,13 @@
             font-size: 15px;
         }
 
+        /* Highlights the currently selected showtime in red */
         .showtime-btn.selected-time {
             background: #ab191ecd;
             border-color: #ab191ecd;
         }
 
+        /* Centers the seat layout section */
         .seat-section {
             width: 100%;
             display: flex;
@@ -64,6 +70,7 @@
             align-items: center;
         }
 
+        /* Screen indicator at the top of the seat layout */
         .screen {
             width: 60%;
             max-width: 520px;
@@ -75,6 +82,7 @@
             font-weight: bold;
         }
 
+        /* Grid layout for seat buttons - 8 seats per row */
         .seat-layout {
             display: grid;
             grid-template-columns: repeat(8, 50px);
@@ -83,6 +91,7 @@
             margin-top: 30px;
         }
 
+        /* Base seat button style */
         .seat {
             width: 50px;
             height: 50px;
@@ -92,22 +101,26 @@
             font-weight: bold;
         }
 
+        /* Green - seat is available to select */
         .available {
             background-color: #4caf50;
             color: white;
         }
 
+        /* Yellow - seat is currently selected by the user */
         .selected {
             background-color: #FFE96B;
             color: black;
         }
 
+        /* Grey - seat is already taken and cannot be selected */
         .taken {
             background-color: #b0b0b0;
             color: white;
             cursor: not-allowed;
         }
 
+        /* Legend showing what each seat color means */
         .legend {
             margin-top: 20px;
         }
@@ -126,6 +139,7 @@
             margin-right: 5px;
         }
 
+        /* Continue button to proceed to seat confirmation */
         .continue-btn {
             margin-top: 25px;
             padding: 12px 28px;
@@ -142,46 +156,66 @@
 </head>
 <body>
 
+    <!-- Page title -->
     <h1>Select Your Seats</h1>
+
+    <!-- Movie title displayed dynamically from URL parameter -->
     <h2 id="movieTitle"></h2>
 
     <div class="booking-container">
+
+        <!-- Left panel showing available showtimes -->
+        <!-- Showtime buttons are generated dynamically by JavaScript from the URL parameter -->
         <div class="showtime-panel">
             <h3>Available Timings</h3>
-                <div id="showtimeButtons"></div>
+            <div id="showtimeButtons"></div>
         </div>
 
+        <!-- Main seat selection area -->
         <div class="seat-section">
+
+            <!-- Screen indicator so users know which direction they are facing -->
             <div class="screen">SCREEN</div>
 
+            <!-- Seat grid - populated dynamically by JavaScript -->
             <div class="seat-layout" id="seatLayout"></div>
 
+            <!-- Color legend explaining seat states -->
             <div class="legend">
                 <span><span class="legend-box" style="background:#4caf50;"></span>Available</span>
                 <span><span class="legend-box" style="background:#FFE96B;"></span>Selected</span>
                 <span><span class="legend-box" style="background:#b0b0b0;"></span>Taken</span>
             </div>
 
-            
+            <!-- Continue button - calls goToConfirmation() which validates selection before redirecting -->
             <button class="continue-btn" onclick="goToConfirmation()">Continue</button>
+
         </div>
     </div>
 
     <script>
+        // Read URL parameters passed from viewtimes.html
         const params = new URLSearchParams(window.location.search);
-        const movie = params.get("movie");
-        const date = params.get("date");
+        const movie = params.get("movie");   // Movie name
+        const date = params.get("date");     // Selected date
+
+        // Display the movie name in the heading
         document.getElementById("movieTitle").textContent = movie ? movie : "No movie selected";
 
         const seatLayout = document.getElementById("seatLayout");
 
+        // Define the rows and columns of the seating layout
         const rows = ["A", "B", "C", "D", "E"];
         const seatsPerRow = 8;
 
+        // takenSeats is fetched from the backend when a showtime is selected
         let takenSeats = [];
+        // selectedSeats tracks which seats the current user has clicked
         let selectedSeats = [];
+        // Tracks which showtime the user has selected
         let selectedShowtime = null;
 
+        // Renders the entire seat grid based on current state of takenSeats and selectedSeats
         function renderSeats() {
             seatLayout.innerHTML = "";
 
@@ -192,6 +226,7 @@
                     button.textContent = seatId;
                     button.classList.add("seat");
 
+                    // Apply correct class based on seat state
                     if (takenSeats.includes(seatId)) {
                         button.classList.add("taken");
                         button.disabled = true;
@@ -207,6 +242,7 @@
             });
         }
 
+        // Toggles a seat between selected and unselected when clicked
         function toggleSeat(seatId) {
             if (selectedSeats.includes(seatId)) {
                 selectedSeats = selectedSeats.filter(seat => seat !== seatId);
@@ -216,19 +252,25 @@
             renderSeats();
         }
 
+        // Called when user clicks a showtime button
+        // Updates selected showtime, resets seat selection, and fetches taken seats from backend
         async function selectShowtime(button, time) {
             selectedShowtime = time;
             selectedSeats = [];
 
+            // Remove highlight from all showtime buttons then highlight the selected one
             document.querySelectorAll(".showtime-btn").forEach(btn => {
                 btn.classList.remove("selected-time");
             });
-
             button.classList.add("selected-time");
+
+            // Fetch taken seats from backend for this movie, showtime, and date
             await loadTakenSeats(time);
             renderSeats();
         }
 
+        // Fetches the list of already taken seats from the backend API
+        // Uses movie, showtime, and date to identify the specific screening
         async function loadTakenSeats(showtime) {
             if (!movie || !showtime) {
                 takenSeats = [];
@@ -250,30 +292,36 @@
                 const data = await response.json();
                 takenSeats = Array.isArray(data.takenSeats) ? data.takenSeats : [];
             } catch (error) {
+                // If the backend call fails, default to no taken seats
                 takenSeats = [];
             }
         }
 
-    function goToConfirmation() {
-        if (!selectedShowtime) {
-            alert("Stop right there! Please select a showtime first!");
-            return;
-        }
-        if (selectedSeats.length === 0) {
-            alert("Dude! Please select at least one seat!");
-            return;
+        // Called when user clicks the Continue button
+        // Validates that a showtime and at least one seat has been selected
+        // Then redirects to seatconfirmation.html passing all selections through the URL
+        function goToConfirmation() {
+            if (!selectedShowtime) {
+                alert("Stop right there! Please select a showtime first!");
+                return;
+            }
+            if (selectedSeats.length === 0) {
+                alert("Dude! Please select at least one seat!");
+                return;
+            }
+
+            const seats = selectedSeats.join(",");
+            window.location.href =
+                "seatconfirmation.html?movie=" + encodeURIComponent(movie) +
+                "&showtime=" + encodeURIComponent(selectedShowtime) +
+                "&seats=" + encodeURIComponent(seats) +
+                "&date=" + encodeURIComponent(date || "");
         }
 
-        const seats = selectedSeats.join(",");
-        window.location.href =
-            "seatconfirmation.html?movie=" + encodeURIComponent(movie) +
-            "&showtime=" + encodeURIComponent(selectedShowtime) +
-            "&seats=" + encodeURIComponent(seats) +
-            "&date=" + encodeURIComponent(date || "");
-    }
-
+        // Initial render of the seat grid (all available at first)
         renderSeats();
 
+        // Read the showtimes from the URL parameter and dynamically create showtime buttons
         const showtimesParam = params.get("showtimes");
         const showtimeList = showtimesParam ? showtimesParam.split(",") : [];
         const showtimeContainer = document.getElementById("showtimeButtons");
@@ -286,6 +334,7 @@
             btn.onclick = function() { selectShowtime(btn, cleanTime); };
             showtimeContainer.appendChild(btn);
 
+            // Auto-select the first showtime by default so the page isn't blank on load
             if (index === 0) {
                 selectShowtime(btn, cleanTime);
             }

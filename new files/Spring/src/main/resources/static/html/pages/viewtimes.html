@@ -4,16 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Times</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
+
+    <!-- Page title and dynamic date display -->
     <h1 style="color: var(--text-color);">Today's Movie Showtimes</h1>
+
+    <!-- This paragraph is empty on load - filled in dynamically by JavaScript below -->
     <p style="color: var(--text-color);" id="todayDate"></p>
+
+    <!-- Date picker input - allows user to select which date they want to see movies -->
+    <!-- min="" is set by JavaScript to prevent selecting past dates -->
+    <!-- onchange calls updateDate() whenever the user picks a new date -->
     <input type="date" id="movieDate" onchange="updateDate()" min="" style="margin-bottom:20px; padding:8px; border-radius:8px; border:none; font-size:15px;">
 
+    <!-- Movie cards container - uses flexbox to lay cards out in a row that wraps -->
     <div style="display:flex; flex-wrap:wrap; gap:20px; padding:20px;">
 
-        <div class = "movie-card">
+        <!-- Movie card 1: Dune Part Four -->
+        <!-- onclick calls goToTickets() passing the movie name and its showtimes -->
+        <div class="movie-card">
             <img src="../images/movie1.png" alt="Dune Part Four" width="100%"><br>
             <h2>Dune: Part Four</h2>
             <p>2 HR 45 MIN | PG-13</p>
@@ -22,7 +34,8 @@
             <button onclick="goToTickets('Dune: Part Four', '10:15 AM,1:30 PM,4:45 PM,8:00 PM')">Get Tickets</button>
         </div>
 
-        <div class = "movie-card">
+        <!-- Movie card 2: Godzilla v. Batman -->
+        <div class="movie-card">
             <img src="../images/movie2.png" alt="Godzilla versus Batman" width="100%"><br>
             <h2>Godzilla v. Batman</h2>
             <p>1 HR 58 MIN | R</p>
@@ -31,7 +44,8 @@
             <button onclick="goToTickets('Godzilla v. Batman', '11:00 AM,2:15 PM,7:30 PM')">Get Tickets</button>
         </div>
 
-        <div class = "movie-card">
+        <!-- Movie card 3: Fart Wars -->
+        <div class="movie-card">
             <img src="../images/movie3.png" alt="Fart Wars" width="100%"><br>
             <h2>Fart Wars</h2>
             <p>2 HR 10 MIN | PG-13</p>
@@ -40,7 +54,8 @@
             <button onclick="goToTickets('Fart Wars', '12:00 PM,3:30 PM,6:00 PM,9:15 PM')">Get Tickets</button>
         </div>
 
-        <div class = "movie-card">
+        <!-- Movie card 4: Amogus -->
+        <div class="movie-card">
             <img src="../images/movie4.png" alt="Amogus" width="100%"><br>
             <h2>Amogus</h2>
             <p>1 HR 42 MIN | PG</p>
@@ -49,7 +64,8 @@
             <button onclick="goToTickets('Amogus', '11:30 AM,2:00 PM,4:30 PM,7:00 PM')">Get Tickets</button>
         </div>
 
-        <div class = "movie-card">
+        <!-- Movie card 5: 67 The Movie -->
+        <div class="movie-card">
             <img src="../images/movie5.png" alt="67: The Movie" width="100%"><br>
             <h2>67: The Movie</h2>
             <p>6 HR 7 MIN | PG-67</p>
@@ -61,24 +77,42 @@
     </div>
 
     <script>
+        // Get today's date and format it as a readable string (a.k.a "Wednesday, April 30, 2026")
         const today = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById("todayDate").textContent = today.toLocaleDateString('en-US', options);
 
+        // Set the date picker to today's date by default
         const dateInput = document.getElementById("movieDate");
         dateInput.valueAsDate = today;
-        dateInput.min = today.toISOString().split("T")[0]; // add it here
 
+        // Set the minimum selectable date to today so users can't pick past dates
+        dateInput.min = today.toISOString().split("T")[0];
+
+        // Called when the user changes the date picker
+        // Updates the displayed date text to match the selected date
         function updateDate() {
             const selected = new Date(dateInput.value + "T00:00:00");
             document.getElementById("todayDate").textContent = selected.toLocaleDateString('en-US', options);
         }
 
+        // Called when the user clicks "Get Tickets" on any movie card
+        // Redirects to tickets.html passing the movie name, showtimes, and selected date through the URL
+        // These values are then read by tickets.html to display the correct info
         function goToTickets(movie, showtimes) {
             const date = dateInput.value;
             window.location.href = "tickets.html?movie=" + encodeURIComponent(movie) + "&showtimes=" + encodeURIComponent(showtimes) + "&date=" + encodeURIComponent(date);
         }
     </script>
+
+    <!-- Fixed button in the bottom left corner for employees to navigate back to their home page -->
+    <div style="position: fixed; bottom: 20px; left: 20px;">
+        <a href="employeehomepage.html">
+            <button style="padding: 10px 20px; border-radius: 8px; background-color: #1a1a2e; color: white; border: 1px solid white; font-size: 14px; cursor: pointer;">
+                Employee Home
+            </button>
+        </a>
+    </div>
 
 </body>
 </html>

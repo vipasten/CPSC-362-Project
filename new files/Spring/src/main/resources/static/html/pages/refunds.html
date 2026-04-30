@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refunds</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -14,6 +15,7 @@
             margin: 0;
         }
 
+        /* Table to display all refund requests */
         .refund-table {
             width: 90%;
             max-width: 1000px;
@@ -22,6 +24,7 @@
             text-align: left;
         }
 
+        /* Red header row */
         .refund-table th {
             background-color: #ab191ecd;
             color: white;
@@ -31,6 +34,7 @@
             text-transform: uppercase;
         }
 
+        /* Table data cells */
         .refund-table td {
             padding: 12px 15px;
             font-size: 14px;
@@ -39,6 +43,7 @@
             word-break: break-word;
         }
 
+        /* Alternating row background */
         .refund-table tr {
             background-color: rgba(255, 255, 255, 0.05);
         }
@@ -47,6 +52,7 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        /* Green approve button */
         .approve-btn {
             padding: 6px 14px;
             font-size: 13px;
@@ -63,6 +69,7 @@
             background: #388e3c;
         }
 
+        /* Red deny button */
         .deny-btn {
             padding: 6px 14px;
             font-size: 13px;
@@ -78,6 +85,7 @@
             background: #8a1015;
         }
 
+        /* Color coded status labels */
         .status-pending {
             color: #FFE96B;
             font-weight: bold;
@@ -93,6 +101,7 @@
             font-weight: bold;
         }
 
+        /* Transparent back button */
         .back-btn {
             margin-top: 12px;
             padding: 12px 28px;
@@ -111,14 +120,17 @@
 </head>
 <body>
 
+    <!-- Page title and subtitle -->
     <h1>Refund Requests</h1>
     <p>Review and process refund requests submitted by users.</p>
 
+    <!-- Button to return to the admin home page -->
     <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
 
-    <!-- Yo Milan, if you see this, try hook this part up to your backend endpoint that returns all refund requests -->
-    <!-- Replace placeholder rows with th:each from Thymeleaf like in viewmembership.html -->
-    <!-- Approve/Deny buttons should POST to an endpoint like /refund/approve?id=1 or /refund/deny?id=1 -->
+    <!-- TODO: Need to hook this table up to a backend endpoint that returns all refund requests -->
+    <!-- Replace placeholder rows with th:each from Thymeleaf like viewmembership.html -->
+    <!-- Approve button should POST to /refund/approve?id=X -->
+    <!-- Deny button should POST to /refund/deny?id=X -->
 
     <table class="refund-table">
         <tr>
@@ -130,10 +142,13 @@
             <th>Reason</th>
             <th>Details</th>
             <th>Date</th>
+            <!-- Status shows whether the refund is pending, approved, or denied -->
             <th>Status</th>
+            <!-- Action column contains the approve and deny buttons -->
             <th>Action</th>
         </tr>
-        <!-- Placeholder rows -->
+
+        <!-- Placeholder rows for demo purposes -->
         <tr>
             <td>1</td>
             <td>Poopy</td>
@@ -170,7 +185,7 @@
             <td>Man</td>
             <td>ORD-573819</td>
             <td>Godzilla v. Batman</td>
-            <td>Parents murdered in alleway.</td>
+            <td>Parents murdered in alleyway.</td>
             <td>Yo, brother. Just as I exited the movie, my mum and dad got shot in like the alleyway, yo. Please refund me money. I need therapy.</td>
             <td>04/27/2026</td>
             <td><span class="status-approved">Approved</span></td>
@@ -179,6 +194,7 @@
                 <button class="deny-btn">Deny</button>
             </td>
         </tr>
+
     </table>
 
 </body>

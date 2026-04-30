@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Tickets</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -14,6 +15,7 @@
             margin: 0;
         }
 
+        /* Table to display all submitted support tickets */
         .ticket-table {
             width: 90%;
             max-width: 900px;
@@ -22,6 +24,7 @@
             text-align: left;
         }
 
+        /* Red header row */
         .ticket-table th {
             background-color: #ab191ecd;
             color: white;
@@ -31,6 +34,7 @@
             text-transform: uppercase;
         }
 
+        /* Table data cells */
         .ticket-table td {
             padding: 12px 15px;
             font-size: 14px;
@@ -39,6 +43,7 @@
             word-break: break-word;
         }
 
+        /* Subtle background for each row */
         .ticket-table tr {
             background-color: rgba(255, 255, 255, 0.05);
         }
@@ -47,12 +52,14 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        /* Message shown if there are no tickets */
         .no-tickets {
             margin-top: 40px;
             color: rgba(255,255,255,0.4);
             font-size: 16px;
         }
 
+        /* Transparent back button */
         .back-btn {
             margin-top: 12px;
             padding: 12px 28px;
@@ -71,13 +78,15 @@
 </head>
 <body>
 
+    <!-- Page title and subtitle -->
     <h1>Open Support Tickets</h1>
     <p>All submitted support tickets from users.</p>
 
+    <!-- Button to return to the admin home page -->
     <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
 
-    <!-- Milan: hook this up to your backend endpoint that returns all support tickets -->
-    <!-- The table below is a placeholder showing what it should look like -->
+    <!-- TODO: Need to hook this table up to a backend endpoint that returns all support tickets -->
+    <!-- Replace placeholder rows with th:each from Thymeleaf like viewmembership.html -->
 
     <table class="ticket-table">
         <tr>
@@ -88,7 +97,8 @@
             <th>Details</th>
             <th>Date Submitted</th>
         </tr>
-        <!-- Milan: replace these placeholder rows with th:each from Thymeleaf like viewmembership.html -->
+
+        <!-- Placeholder rows for demo purposes -->
         <tr>
             <td>1</td>
             <td>John</td>
@@ -113,6 +123,7 @@
             <td>You suck! I just wanted to say that. You're all poopyheads</td>
             <td>04/27/2026</td>
         </tr>
+
     </table>
 
 </body>

@@ -1,20 +1,36 @@
 <!DOCTYPE html>
+<!-- Thymeleaf namespace declaration - allows use of th: attributes for server-side rendering -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>User List</title>
+        <!-- Link to the shared stylesheet for the whole site -->
+        <!-- Uses absolute path /html/style.css since this page is served by Spring Boot -->
         <link rel="stylesheet" href="/html/style.css" />
     </head>
 
     <body>
         <div class="user-listing">
             <h1>Membership List</h1>
+
+            <!-- Search form - submits a GET request to /viewmembership with a search query -->
+            <!-- AuthController.java handles this request and passes matching users to the template -->
             <form action="/viewmembership" method="get" style="margin-bottom: 20px;">
-                <input type="text" name="search" th:value="${searchQuery}" placeholder="Search by username, first name, or last name" ; />
+
+                <!-- Search input - th:value pre-fills the field with the last search query -->
+                <!-- so the search term stays visible after submitting -->
+                <input type="text" name="search" th:value="${searchQuery}" placeholder="Search by username, first name, or last name" />
+
+                <!-- Submit button triggers the search -->
                 <button type="submit" style="padding: 5px 10px;">Search</button>
+
+                <!-- Clear link resets the search by navigating back to the page without a query -->
                 <a href="viewmembership.html" style="margin-left: 10px;">Clear</a>
+
             </form>
+
+            <!-- Table displaying all users returned from the backend -->
             <table>
                 <tr>
                     <th>User ID</th>
@@ -23,12 +39,20 @@
                     <th>Last Name</th>
                     <th>Signup Date</th>
                 </tr>
+
+                <!-- th:each loops through the users list passed in by AuthController.java -->
+                <!-- and renders one row per user -->
                 <tr th:each="user : ${users}">
+
+                    <!-- th:text fills each cell with the corresponding user field -->
                     <td th:text="${user.id}"></td>
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.firstName}"></td>
                     <td th:text="${user.lastName}"></td>
+
+                    <!-- Formats signupDate as MM/dd/yyyy, shows N/A if the date is null -->
                     <td th:text="${user.signupDate != null ? #temporals.format(user.signupDate, 'MM/dd/yyyy') : 'N/A'}"></td>
+
                 </tr>
             </table>
         </div>

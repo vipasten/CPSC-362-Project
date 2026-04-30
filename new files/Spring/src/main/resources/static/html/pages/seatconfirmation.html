@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seat Confirmation</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -14,6 +15,7 @@
             margin: 0;
         }
 
+        /* Dark rounded box containing the order summary */
         .confirmation-box {
             background-color: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -23,20 +25,24 @@
             text-align: left;
         }
 
-            .confirmation-box p {
-                font-size: 18px;
-                margin: 15px 0;
-                color: white;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                padding-bottom: 10px;
-                word-break: break-all;
-            }
+        /* Each line in the summary box */
+        /* word-break: break-all prevents long seat lists from overflowing the box */
+        .confirmation-box p {
+            font-size: 18px;
+            margin: 15px 0;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            word-break: break-all;
+        }
 
+        /* Yellow highlight for the data values */
         .confirmation-box span {
             color: #FFE96B;
             font-weight: bold;
         }
 
+        /* Red button to proceed to the payment page */
         .confirm-btn {
             margin-top: 25px;
             padding: 14px 32px;
@@ -54,6 +60,7 @@
             background: #8a1015;
         }
 
+        /* Transparent button to go back to the previous page */
         .back-btn {
             margin-top: 12px;
             padding: 12px 28px;
@@ -73,41 +80,57 @@
 </head>
 <body>
 
+    <!-- Page title and subtitle -->
     <h1>Seat Confirmation</h1>
     <p>Does this look right? I hope so. You're about to pay a lot of money for movies that don't actually exist, buddy!</p>
 
+    <!-- Order summary box showing all booking details -->
     <div class="confirmation-box">
+
+        <!-- Each span is filled in dynamically by JavaScript below -->
         <p>Movie: <span id="movieDisplay"></span></p>
         <p>Date: <span id="dateDisplay"></span></p>
         <p>Showtime: <span id="showtimeDisplay"></span></p>
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalDisplay"></span></p>
 
+        <!-- Proceeds to payment page, passing all booking info through the URL -->
         <button class="confirm-btn" onclick="goToPayment()">Proceed to Payment</button>
+
+        <!-- Goes back to the seat selection page -->
         <button class="back-btn" onclick="history.back()">Go Back</button>
+
     </div>
 
     <script>
+        // Read all booking details passed through the URL from tickets.html
         const params = new URLSearchParams(window.location.search);
         const movie = params.get("movie");
         const showtime = params.get("showtime");
         const seats = params.get("seats");
         const date = params.get("date");
 
+        // Display all booking details in the summary box
         document.getElementById("movieDisplay").textContent = movie;
         document.getElementById("showtimeDisplay").textContent = showtime;
         document.getElementById("seatsDisplay").textContent = seats;
-        document.getElementById("totalDisplay").textContent = seats.split(",").length + " seat(s)";
 
-        // Format the date nicely for display
+        // Count the number of seats by splitting the comma-separated string
+        document.getElementById("totalDisplay").textContent = seats ? seats.split(",").length + " seat(s)" : "0 seat(s)";
+
+        // Format and display the date nicely (e.g. "Wednesday, April 30, 2026")
         if (date) {
             const formatted = new Date(date + "T00:00:00");
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
         }
 
+        // Redirects to paymentpage.html passing all booking info through the URL
         function goToPayment() {
-            window.location.href = "paymentpage.html?movie=" + encodeURIComponent(movie) + "&showtime=" + encodeURIComponent(showtime) + "&seats=" + encodeURIComponent(seats) + "&date=" + encodeURIComponent(date);
+            window.location.href = "paymentpage.html?movie=" + encodeURIComponent(movie) +
+                "&showtime=" + encodeURIComponent(showtime) +
+                "&seats=" + encodeURIComponent(seats) +
+                "&date=" + encodeURIComponent(date);
         }
     </script>
 

@@ -1,45 +1,62 @@
 <!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset = "UTF-8">
-        <meta name = "viewport" content = "width=device-width, intial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="../style.css" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Link to the shared stylesheet for the whole site -->
+    <link rel="stylesheet" href="../style.css" />
+</head>
 
-    </head>
+<body>
 
-    <body>
-        <div class = "listing">
-                <button>
-                <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
-            </button>
-            <button>
-                <a href="viewtimes.html"><img src= "../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
-            </button>
-            <button>
-                <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
-            </button>
+    <!-- Navigation bar with icon buttons linking to other pages -->
+    <div class="listing">
+        <!-- Home button -->
+        <button>
+            <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+        </button>
+        <!-- View Showtimes button -->
+        <button>
+            <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
+        </button>
+        <!-- Support Ticket button -->
+        <button>
+            <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+        </button>
+    </div>
+
+    <h1>
+        <!-- Signup form container styled with the .forms class from style.css -->
+        <div class="forms">
+            <h1>Sign up Form</h1>
+
+            <!-- Form submits a POST request to the /signup endpoint handled by AuthController.java -->
+            <!-- AuthController creates a new user account with the role of MEMBER and saves it to the database -->
+            <form action="/signup" method="post">
+
+                <!-- First name input field -->
+                <label for="fname">First Name:</label>
+                <input type="text" id="fname" name="fname" required><br><br>
+
+                <!-- Last name input field -->
+                <label for="lname">Last Name:</label>
+                <input type="text" id="lname" name="lname" required><br><br>
+
+                <!-- Username input field - must be unique, checked in AuthService.java -->
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <!-- Password input field - gets hashed with BCrypt before being stored -->
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <!-- Submit button sends the form data to the backend -->
+                <input type="submit" value="Create Account">
+
+            </form>
         </div>
-            <h1>
-                <div class="forms">
-                    <h1>Sign up Form</h1>
+    </h1>
 
-                    <form action="/signup" method="post">
-                        <label for="fname">First Name:</label>
-                        <input type="text" id="fname" name="fname" required><br><br>
-
-                        <label for="lname">Last Name:</label>
-                        <input type="text" id="lname" name="lname" required><br><br>
-
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" required><br><br>
-                        
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required><br><br>
-                        
-                        <input type="submit" value="Create Account">
-                    </form>
-                </div>
-            </h1>
-    </body>
+</body>
 </html>
