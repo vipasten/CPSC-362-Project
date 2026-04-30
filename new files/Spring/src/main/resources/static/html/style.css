@@ -29,6 +29,16 @@ body {
     margin: 0 auto;
 }
 
+.movie-card {
+    background-color:white;
+    border-radius:10px;
+    width:200px;
+    padding:15px;
+    box-shadow:2px 2px 8px gray;
+    text-align:center;
+    p,h1,h2,h3{color:var(--base-color)}
+}
+
 
 /*All headers use Bold Kanit*/
 h1, h2, h3 {
