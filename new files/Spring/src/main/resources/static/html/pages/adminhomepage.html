@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="../images/tab.png">
         <title>Admin Home Page</title>
         <link rel="stylesheet" href="/html/style.css" />
     </head>
@@ -25,6 +26,40 @@
             <div class="stat"><div class="lbl">OPEN TICKETS</div></div>
             <div class="stat"><div class="lbl">REFUNDS</div></div>
             <div class="stat"><div class="lbl"><a href="/html/pages/adminpromos.html">PROMOS</a></div></div>
+
+        <!-- Navigation buttons row - each button links to a different admin page -->
+        <!-- Uses inline flex instead of .row class to avoid CSS conflicts with .stat width -->
+        <div style="display: flex; gap: 1.5em; margin-top: 3em; width: 100%;">
+
+            <!-- View Members - links to the Thymeleaf-rendered membership list page -->
+            <!-- Uses /viewmembership (backend route) instead of a static HTML file -->
+            <a href="/viewmembership" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">VIEW MEMBERS</div>
+                </div>
+            </a>
+
+            <!-- Open Tickets - links to the support tickets admin page -->
+            <a href="/viewsupporttickets" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">OPEN TICKETS</div>
+                </div>
+            </a>
+
+            <!-- Refunds - links to the refund requests admin page -->
+            <a href="refunds.html" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">REFUNDS</div>
+                </div>
+            </a>
+
+            <!-- Promos - links to the promo code management page -->
+            <a href="promos.html" style="flex: 1; display: block; text-decoration: none;">
+                <div class="stat" style="width: 100%; box-sizing: border-box; margin-top: 0;">
+                    <div class="lbl">PROMOS</div>
+                </div>
+            </a>
+
         </div>
     </body>
 </html>

@@ -1,8 +1,13 @@
 package com.example.demo.auth;
 
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+
+// The repository which is the interface for the user-related database operations
+// It extends the JpaRepository in order to provide the built in CRUD functionality 
 
 // The repository which is the interface for the user-related database operations
 // It extends the JpaRepository in order to provide the built in CRUD functionality 

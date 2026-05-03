@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Status Lookup</title>
+    <!-- Link to the shared stylesheet for the whole site -->
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        /* Dark rounded box containing the lookup form */
+        .lookup-box {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .lookup-box h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* Label styling */
+        .lookup-box label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Dark styled input field */
+        .lookup-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .lookup-box input::placeholder {
+            color: rgba(255,255,255,0.3);
+            text-transform: none;
+        }
+
+        /* Red lookup button */
+        .lookup-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+        }
+
+        .lookup-btn:hover {
+            background: #8a1015;
+        }
+
+        /* Transparent home button */
+        .home-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            width: 100%;
+        }
+
+        .home-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Error message shown if REF number is invalid */
+        .error-msg {
+            color: #e05252;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar with icon buttons -->
+    <div class="listing">
+        <button>
+            <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+        </button>
+        <button>
+            <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
+        </button>
+        <button>
+            <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+        </button>
+    </div>
+
+    <h1>Check Refund Status</h1>
+    <p>Enter your Refund Reference Number below to view the status of your request.</p>
+
+    <div class="lookup-box">
+        <h2>Refund Lookup</h2>
+
+        <!-- REF number input field -->
+        <!-- If coming from refundconfirmation.html, this is pre-filled via JavaScript -->
+        <label for="refInput">Refund Reference Number:</label>
+        <input type="text" id="refInput" placeholder="e.g. REF-482910" maxlength="10">
+
+        <!-- Error message shown if the field is empty -->
+        <p class="error-msg" id="errorMsg">Please enter a valid REF number!</p>
+
+        <!-- Lookup button redirects to refundthread.html with the REF number in the URL -->
+        <button class="lookup-btn" onclick="lookupRef()">Look Up My Request</button>
+        <button class="home-btn" onclick="window.location.href='../index.html'">Back to Home</button>
+    </div>
+
+    <script>
+        // Check if a REF number was passed through the URL (from refundconfirmation.html)
+        // If so, pre-fill the input field so the customer doesn't have to type it again
+        const params = new URLSearchParams(window.location.search);
+        const prefilledRef = params.get("ref");
+        if (prefilledRef) {
+            document.getElementById("refInput").value = prefilledRef;
+        }
+
+        // Called when the customer clicks Look Up My Request
+        // Validates the input then redirects to refundthread.html with the REF number
+        function lookupRef() {
+            const ref = document.getElementById("refInput").value.trim().toUpperCase();
+            const errorMsg = document.getElementById("errorMsg");
+
+            // Validate the input is not empty
+            if (!ref) {
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            errorMsg.style.display = "none";
+
+            // Redirect to refundthread.html passing the REF number through the URL
+            // refundthread.html will use this to fetch the request details from the backend
+            window.location.href = "refundthread.html?ref=" + encodeURIComponent(ref);
+        }
+    </script>
+
+</body>
+</html>
