@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refunds</title>
+    <!-- Link to the shared stylesheet for the whole site -->
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        /* Each refund request displayed as a card */
+        .refund-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-header h3 { margin: 0; color: #FFE96B; font-size: 16px; }
+
+        .card-detail { font-size: 14px; color: white; margin: 8px 0; }
+        .card-detail span { color: #FFE96B; font-weight: bold; }
+
+        .status-pending { color: #FFE96B; font-weight: bold; }
+        .status-approved { color: #4caf50; font-weight: bold; }
+        .status-denied { color: #e05252; font-weight: bold; }
+        .status-closed { color: rgba(255,255,255,0.4); font-weight: bold; }
+
+        .thread {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .thread h4 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .message { border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 14px; }
+        .message.customer { background-color: rgba(255,255,255,0.05); border-left: 3px solid #FFE96B; }
+        .message.admin { background-color: rgba(171,25,30,0.15); border-left: 3px solid #ab191ecd; }
+
+        .message-header { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 5px; }
+        .message-header strong { color: rgba(255,255,255,0.7); font-size: 12px; }
+
+        .reply-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .reply-section label { display: block; font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+
+        .reply-section textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            height: 80px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .reply-btn {
+            flex: 1; padding: 10px; font-size: 14px; font-weight: bold;
+            border: none; border-radius: 10px; cursor: pointer;
+            background: #ab191ecd; color: white;
+        }
+        .reply-btn:hover { background: #8a1015; }
+
+        .approve-btn {
+            flex: 1; padding: 10px; font-size: 14px; font-weight: bold;
+            border: none; border-radius: 10px; cursor: pointer;
+            background: #4caf50; color: white;
+        }
+        .approve-btn:hover { background: #388e3c; }
+
+        .deny-btn {
+            flex: 1; padding: 10px; font-size: 14px; font-weight: bold;
+            border: none; border-radius: 10px; cursor: pointer;
+            background: #c0392b; color: white;
+        }
+        .deny-btn:hover { background: #8a1015; }
+
+        .back-btn {
+            padding: 12px 28px; font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25); border-radius: 16px;
+            cursor: pointer; background: transparent; color: white;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.08); }
+
+        .loading { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 30px; }
+        .no-requests { color: rgba(255,255,255,0.4); font-size: 16px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <h1>Refund Requests</h1>
+    <p>Review, reply to, and process refund requests submitted by users.</p>
+
+    <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
+
+    <!-- Loading message shown while fetching data -->
+    <p class="loading" id="loadingMsg">Loading refund requests...</p>
+
+    <!-- Container where refund cards are rendered dynamically -->
+    <div id="refundContainer"></div>
+
+    <script>
+        // Fetch all refund requests from the backend on page load
+        async function loadAllRefunds() {
+            try {
+                const response = await fetch("/api/refunds/all");
+                const data = await response.json();
+
+                document.getElementById("loadingMsg").style.display = "none";
+                const container = document.getElementById("refundContainer");
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = "<p class='no-requests'>No refund requests yet.</p>";
+                    return;
+                }
+
+                // Render a card for each refund request
+                data.forEach(request => {
+                    const card = document.createElement("div");
+                    card.className = "refund-card";
+
+                    // Determine status label color
+                    let statusHtml = "";
+                    const status = request.status ? request.status.toLowerCase() : "pending";
+                    if (status === "pending") statusHtml = "<span class='status-pending'>Pending</span>";
+                    else if (status === "approved") statusHtml = "<span class='status-approved'>Approved</span>";
+                    else if (status === "denied") statusHtml = "<span class='status-denied'>Denied</span>";
+                    else if (status === "closed") statusHtml = "<span class='status-closed'>Closed</span>";
+
+                    // Build admin reply message HTML if one exists
+                    let adminReplyHtml = "";
+                    if (request.adminReply) {
+                        const replyTime = request.repliedAt ? new Date(request.repliedAt).toLocaleString('en-US') : "";
+                        adminReplyHtml = `
+                            <div class="message admin">
+                                <div class="message-header"><strong>Admin</strong> &nbsp; ${replyTime}</div>
+                                <div>${request.adminReply}</div>
+                            </div>
+                        `;
+                    }
+
+                    const submitTime = request.submittedAt ? new Date(request.submittedAt).toLocaleString('en-US') : "";
+
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <h3>${request.refNumber}</h3>
+                            ${statusHtml}
+                        </div>
+                        <div class="card-detail">Name: <span>${request.firstName} ${request.lastName}</span></div>
+                        <div class="card-detail">Order #: <span>${request.orderNumber}</span></div>
+                        <div class="card-detail">Movie: <span>${request.movie}</span></div>
+                        <div class="card-detail">Reason: <span>${request.reason}</span></div>
+                        <div class="card-detail">Details: <span>${request.details || "No additional details."}</span></div>
+                        <div class="card-detail">Submitted: <span>${submitTime}</span></div>
+
+                        <div class="thread">
+                            <h4>Conversation</h4>
+                            <div class="message customer">
+                                <div class="message-header"><strong>${request.firstName} ${request.lastName}</strong> &nbsp; ${submitTime}</div>
+                                <div>${request.details || "No additional details."}</div>
+                            </div>
+                            ${adminReplyHtml}
+                        </div>
+
+                        <div class="reply-section">
+                            <label>Reply to this request:</label>
+                            <textarea id="reply-${request.refNumber}" placeholder="Type your reply here..."></textarea>
+                            <div class="action-row">
+                                <button class="reply-btn" onclick="sendReply('${request.refNumber}')">Send Reply</button>
+                                <button class="approve-btn" onclick="updateStatus('${request.refNumber}', 'approve')">Approve</button>
+                                <button class="deny-btn" onclick="updateStatus('${request.refNumber}', 'deny')">Deny</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                document.getElementById("loadingMsg").textContent = "Could not load refund requests. Please try again.";
+            }
+        }
+
+        // Send admin reply to a specific refund request
+        async function sendReply(refNumber) {
+            const text = document.getElementById("reply-" + refNumber).value.trim();
+            if (!text) {
+                alert("Please type a reply before sending!");
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    "/api/refunds/reply?ref=" + encodeURIComponent(refNumber) +
+                    "&replyText=" + encodeURIComponent(text),
+                    { method: "POST" }
+                );
+                const result = await response.json();
+                if (result.success) {
+                    alert("Reply sent successfully!");
+                    document.getElementById("reply-" + refNumber).value = "";
+                    loadAllRefunds(); // Refresh the page data
+                } else {
+                    alert("Could not send reply. Please try again.");
+                }
+            } catch (error) {
+                alert("Could not send reply. Please try again.");
+            }
+        }
+
+        // Approve or deny a refund request
+        async function updateStatus(refNumber, action) {
+            const actionLabel = action === "approve" ? "approve" : "deny";
+            if (!confirm("Are you sure you want to " + actionLabel + " this request?")) return;
+
+            try {
+                const response = await fetch(
+                    "/api/refunds/" + action + "?ref=" + encodeURIComponent(refNumber),
+                    { method: "POST" }
+                );
+                const result = await response.json();
+                if (result.success) {
+                    alert("Request " + actionLabel + "d successfully!");
+                    loadAllRefunds(); // Refresh the page data
+                } else {
+                    alert("Could not update request. Please try again.");
+                }
+            } catch (error) {
+                alert("Could not update request. Please try again.");
+            }
+        }
+
+        // Load all refund requests when the page opens
+        loadAllRefunds();
+    </script>
+
+</body>
+</html>

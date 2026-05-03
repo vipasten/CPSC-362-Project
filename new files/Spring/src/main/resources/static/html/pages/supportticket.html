@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="../images/tab.png">
+        <title>File a Support Ticket</title>
+        <link rel="stylesheet" href="../style.css" />
+
+    </head>
+
+    <body>
+            <h1>
+                <div class = "listing">
+                    <button>
+                        <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+                    </button>
+                    <button>
+                        <a href="viewtimes.html"><img src= "../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
+                    </button>
+                    <button>
+                        <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+                    </button>
+                </div>
+                <div class="forms">
+                    <h1>File a Support Ticket</h1>
+
+                    <form action="/submitsupportticket" method="post">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required><br><br>
+
+                        <label for="fname">First Name:</label>
+                        <input type="text" id="fname" name="fname" required><br><br>
+
+                        <label for="lname">Last Name:</label>
+                        <input type="text" id="lname" name="lname" required><br><br>
+
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" required><br><br>
+                        
+                        <label for="details">Details:</label>
+                        <textarea name = "details"; class="large-input" required></textarea><br><br>
+
+                        <button style= background-color:var(--movie-red); type="submit">
+                            Submit Ticket</a></button>
+
+                    </form>
+                </div>
+            </h1>
+    </body>
+</html>

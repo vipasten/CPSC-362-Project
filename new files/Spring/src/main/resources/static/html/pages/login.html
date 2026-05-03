@@ -1,31 +1,59 @@
 <!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset = "UTF-8">
-        <meta name = "viewport" content = "width=device-width, intial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="../style.css" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Link to the shared stylesheet for the whole site -->
+    <link rel="stylesheet" href="../style.css" />
+</head>
 
-    </head>
+<body>
 
-    <body>
-            <h1>
-                <div class="login">
-                    <h1>Login Form</h1>
+    <!-- Navigation bar with icon buttons linking to other pages -->
+    <div class="listing">
+        <!-- Home button -->
+        <button>
+            <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+        </button>
+        <!-- View Showtimes button -->
+        <button>
+            <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
+        </button>
+        <!-- Support Ticket button -->
+        <button>
+            <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+        </button>
+    </div>
 
-                    <form action="/login" method="post">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" required><br><br>
-                        
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required><br><br>
-                        
-                        <input type="submit" value="Login">
-                        <div>
-                            <p1>Don't have an account? <a href="signup.html">Sign up here!</a>.</p1>
-                        </div>
-                    </form>
+    <h1>
+        <!-- Login form container styled with the .forms class from style.css -->
+        <div class="forms">
+            <h1>Login Form</h1>
+
+            <!-- Form submits a POST request to the /login endpoint handled by AuthController.java -->
+            <!-- AuthController checks credentials and redirects based on user role (ADMIN, EMPLOYEE, MEMBER) -->
+            <form action="/login" method="post">
+
+                <!-- Username input field -->
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <!-- Password input field -->
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <!-- Submit button sends the form data to the backend -->
+                <input type="submit" value="Login">
+
+                <!-- Link to signup page for new users -->
+                <div>
+                    <p1>Don't have an account? <a href="signup.html">Sign up here!</a>.</p1>
                 </div>
-            </h1>
-    </body>
+
+            </form>
+        </div>
+    </h1>
+
+</body>
 </html>

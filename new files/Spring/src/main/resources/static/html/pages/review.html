@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Reviews</title>
+    <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+     <!-- Navbar -->
+    <header>
+        <div class="box">
+            <nav>
+                <ul>
+                    <!-- Home Icon -->
+                    <div class="icon">
+                        <a href="../index.html">
+                            <button type="button">
+                                <img src="../images/home-icon.svg" alt="Home Icon">
+                            </button>
+                        </a>
+                    </div>
+
+                    <!-- Logo -->
+                    <div class="push_center">
+                        <img src="../images/Logo (1).png" alt="Movie Theater Logo">
+                    </div>
+
+                    <!-- Movies Icon -->
+                    <div class="push right">
+                        <a href="viewtimes.html">
+                            <button type="button">
+                                <img src="../images/movie-icon.svg" alt="View Times Icon">
+                            </button>
+                        </a>
+                    </div>
+
+                    <!-- About Us Icon -->
+                    <div>
+                        <a href="aboutus.html">
+                            <button type="button">
+                                <img src="../images/about-us-icon.svg" alt="About Us Icon">
+                            </button>
+                        </a>
+                    </div>
+
+                    <!-- Account Icon -->
+                    <div>
+                        <a href="login.html">
+                            <button type="button">
+                                <img src="../images/account-icon.svg" alt="Account Icon">
+                            </button>
+                        </a>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Review Page Content -->
+    <div class="review-page">
+        <div class="review-layout">
+            
+            <!-- Movie Poster -->
+            <div class="review-movie-image">
+                <img id="movie-poster" src="../images/movie1.png" alt="Movie Poster">
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="review-content">
+
+                <!-- Title and Add Review Button -->
+                <div class="review-header-row">
+                    <h1 id="review-page-title">Movie Reviews</h1>
+                    <button type="button" class="add-review-btn" onclick="toggleReviewForm()">+</button>
+                </div>
+
+                <!-- Hidden Review Form -->
+                <div id="review-form-wrapper" class="review-form-wrapper hidden">
+                    <form id="review-form" class="review-form" action="#" method="post">
+
+                        <!-- Name Input -->
+                        <label for="review-username">Name</label>
+                        <input type="text" id="review-username" name="review-username" required>
+
+                        <!-- Rating Dropdown -->
+                        <label for="rating">Rating</label>
+                        <select id="rating" name="rating" required>
+                            <option value="">Select a rating</option>
+                            <option value="5">★★★★★</option>
+                            <option value="4">★★★★☆</option>
+                            <option value="3">★★★☆☆</option>
+                            <option value="2">★★☆☆☆</option>
+                            <option value="1">★☆☆☆☆</option>
+                        </select>
+
+                        <!-- Review Text -->
+                        <label for="review-text">Review</label>
+                        <textarea id="review-text" name="review-text" rows="5" required></textarea>
+
+                        <!-- Submit Button -->
+                        <input type="submit" value="Submit Review">
+                    </form>
+                </div>
+
+                <!-- Area for Reviews to Appear -->
+                <div class="review-list" id="review-list">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get movie name from URL
+        const params = new URLSearchParams(window.location.search);
+        const movie = params.get("movie");
+
+        // Page elements
+        const title = document.getElementById("review-page-title");
+        const poster = document.getElementById("movie-poster");
+        const formWrapper = document.getElementById("review-form-wrapper");
+        const reviewForm = document.getElementById("review-form");
+        const reviewList = document.getElementById("review-list");
+
+        // Match Movies Names to Images
+        const posterMap = {
+            "Dune: Part Four": "../images/movie1.png",
+            "Godzilla v. Batman": "../images/movie2.png",
+            "Fart Wars": "../images/movie3.png",
+            "Amogus": "../images/movie4.png",
+            "67: The Movie": "../images/movie5.png"
+        };
+
+        // Update title and poster if movie is in URL
+        if (movie) {
+            title.textContent = movie + " Reviews";
+
+            if (posterMap[movie]) {
+                poster.src = posterMap[movie];
+                poster.alt = movie + " Poster";
+            }
+        }
+
+        // Show/hide review form
+        function toggleReviewForm() {
+            formWrapper.classList.toggle("hidden");
+        }
+
+        // Add review to page after submit
+        reviewForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("review-username").value.trim();
+            const rating = document.getElementById("rating").value;
+            const reviewText = document.getElementById("review-text").value.trim();
+
+            if (!name || !rating || !reviewText) return;
+
+            const stars = "★".repeat(Number(rating)) + "☆".repeat(5 - Number(rating));
+
+            const newReview = document.createElement("div");
+            newReview.className = "review-card";
+            newReview.innerHTML = `
+                <p class="review-name">${name}</p>
+                <p class="review-stars">${stars}</p>
+                <p class="review-body">${reviewText}</p>
+            `;
+
+            reviewList.prepend(newReview);
+
+            // Clear form and hide it again
+            reviewForm.reset();
+            formWrapper.classList.add("hidden");
+        });
+    </script>
+</body>
+</html>

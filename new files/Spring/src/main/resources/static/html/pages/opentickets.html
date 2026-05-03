@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Tickets</title>
+    <!-- Link to the shared stylesheet for the whole site -->
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        /* Table to display all submitted support tickets */
+        .ticket-table {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        /* Red header row */
+        .ticket-table th {
+            background-color: #ab191ecd;
+            color: white;
+            padding: 12px 15px;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Table data cells */
+        .ticket-table td {
+            padding: 12px 15px;
+            font-size: 14px;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            word-break: break-word;
+        }
+
+        /* Subtle background for each row */
+        .ticket-table tr {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .ticket-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Message shown if there are no tickets */
+        .no-tickets {
+            margin-top: 40px;
+            color: rgba(255,255,255,0.4);
+            font-size: 16px;
+        }
+
+        /* Transparent back button */
+        .back-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page title and subtitle -->
+    <h1>Open Support Tickets</h1>
+    <p>All submitted support tickets from users.</p>
+
+    <!-- Button to return to the admin home page -->
+    <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
+
+    <!-- TODO: Need to hook this table up to a backend endpoint that returns all support tickets -->
+    <!-- Replace placeholder rows with th:each from Thymeleaf like viewmembership.html -->
+
+    <table class="ticket-table">
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Subject</th>
+            <th>Details</th>
+            <th>Date Submitted</th>
+        </tr>
+
+        <!-- Placeholder rows for demo purposes -->
+        <tr>
+            <td>1</td>
+            <td>John</td>
+            <td>Wayne</td>
+            <td>Refund Request</td>
+            <td>I would like a refund for my tickets purchased on April 20th. My airport caught on fire, so I couldn't watch the movies. You know I own an airport, right?</td>
+            <td>04/25/2026</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>John</td>
+            <td>Wilkes Booth</td>
+            <td>Wrong seats</td>
+            <td>The seats I booked were already taken when I arrived! Now I have no choice but to take the very top seat!</td>
+            <td>04/26/2026</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Le</td>
+            <td>Troll</td>
+            <td>Personal Issue</td>
+            <td>You suck! I just wanted to say that. You're all poopyheads</td>
+            <td>04/27/2026</td>
+        </tr>
+
+    </table>
+
+</body>
+</html>
