@@ -10,4 +10,6 @@ public interface SeatReservationRepository extends JpaRepository<SeatReservation
 	// This is what retreievs all of the seat reservations for the sepcific movie, showtime, and the date 
 	// It is used to determine which of the seats are already taken 
 	List<SeatReservation> findByMovieTitleAndShowtimeAndShowDate(String movieTitle, String showtime, String showDate);
+
+	List<SeatReservation> findByUsername(String username);
 }

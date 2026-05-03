@@ -4,18 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refund Request</title>
-    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin: 0;
-        }
+        body { font-family: Arial, sans-serif; color: white; text-align: center; padding: 30px; margin: 0; }
 
-        /* Dark rounded box containing the refund form */
         .forms {
             background-color: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -25,22 +17,10 @@
             text-align: left;
         }
 
-        .forms h1 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
+        .forms h1 { text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 22px; }
 
-        /* Label styling for each form field */
-        .forms label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-        }
+        .forms label { display: block; margin-bottom: 6px; font-size: 14px; color: rgba(255,255,255,0.7); }
 
-        /* Dark styled input, textarea, and select fields */
         .forms input, .forms textarea, .forms select {
             width: 100%;
             padding: 10px;
@@ -53,72 +33,36 @@
             margin-bottom: 15px;
         }
 
-        /* Textarea height for the details field */
-        .forms textarea {
-            height: 100px;
-            resize: vertical;
-        }
+        .forms textarea { height: 100px; resize: vertical; }
+        .forms select option { background-color: #1a1a1a; color: white; }
 
-        /* Dark background for dropdown options */
-        .forms select option {
-            background-color: #1a1a1a;
-            color: white;
-        }
-
-        /* Red submit button */
         .submit-btn {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
-            background: #ab191ecd;
-            color: white;
-            margin-top: 10px;
+            width: 100%; padding: 14px; font-size: 16px; font-weight: bold;
+            border: none; border-radius: 16px; cursor: pointer;
+            background: #ab191ecd; color: white; margin-top: 10px;
         }
 
         .submit-btn:hover { background: #8a1015; }
         .submit-btn:disabled { background: rgba(255,255,255,0.2); cursor: not-allowed; }
 
-        /* Transparent go back button */
         .back-btn {
-            margin-top: 12px;
-            padding: 12px 28px;
-            font-size: 15px;
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 16px;
-            cursor: pointer;
-            background: transparent;
-            color: white;
-            width: 100%;
+            margin-top: 12px; padding: 12px 28px; font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25); border-radius: 16px;
+            cursor: pointer; background: transparent; color: white; width: 100%;
         }
 
         .back-btn:hover { background: rgba(255,255,255,0.08); }
 
-        /* Error message shown if submission fails */
-        .error-msg {
-            color: #e05252;
-            font-size: 14px;
-            margin-top: 10px;
-            display: none;
-        }
+        .error-msg { color: #e05252; font-size: 14px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
     <!-- Navigation bar -->
     <div class="listing">
-        <button>
-            <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
-        </button>
-        <button>
-            <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
-        </button>
-        <button>
-            <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
-        </button>
+        <button><a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a></button>
+        <button><a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a></button>
+        <button><a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a></button>
     </div>
 
     <h1>Request thy Refund</h1>
@@ -161,6 +105,21 @@
     </div>
 
     <script>
+        // Pre-fill name fields if the user is logged in via session
+        async function prefillFromSession() {
+            try {
+                const res = await fetch("/api/session", { credentials: "include" });
+                const data = await res.json();
+                // If logged in we can potentially prefill name from the member account
+                // For now just store the session data for use during submission
+                window._sessionData = data;
+            } catch (e) {
+                window._sessionData = { loggedIn: false };
+            }
+        }
+
+        prefillFromSession();
+
         async function submitRefund() {
             const fname = document.getElementById("fname").value.trim();
             const lname = document.getElementById("lname").value.trim();
@@ -171,34 +130,39 @@
             const errorMsg = document.getElementById("errorMsg");
             const submitBtn = document.getElementById("submitBtn");
 
-            // Validate all required fields are filled in
             if (!fname || !lname || !orderNumber || !movie || !reason) {
                 alert("Please fill in all required fields!");
                 return;
             }
 
-            // Generate a unique REF number for this refund request
+            // Generate a unique REF number
             const refNumber = "REF-" + Math.floor(Math.random() * 900000 + 100000);
 
-            // Disable button to prevent double submission
             submitBtn.disabled = true;
             submitBtn.textContent = "Submitting...";
 
             try {
-                // Send the refund request to the backend to save in the database
+                // POST to backend; username is automatically grabbed from the HTTP session
+                // on the server side so we don't need to send it explicitly
                 const response = await fetch("/api/refunds/submit", {
                     method: "POST",
+                    credentials: "include",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams({
-                        refNumber, firstName: fname, lastName: lname,
-                        orderNumber, movie, reason, details
+                        refNumber,
+                        firstName: fname,
+                        lastName: lname,
+                        orderNumber,
+                        movie,
+                        reason,
+                        details
                     })
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    // On success redirect to confirmation page with all details
+                    // Redirect to confirmation page
                     window.location.href = "refundconfirmation.html?" +
                         "ref=" + encodeURIComponent(refNumber) +
                         "&fname=" + encodeURIComponent(fname) +
@@ -208,13 +172,11 @@
                         "&reason=" + encodeURIComponent(reason) +
                         "&details=" + encodeURIComponent(details);
                 } else {
-                    // Show error message if backend returns failure
                     errorMsg.style.display = "block";
                     submitBtn.disabled = false;
                     submitBtn.textContent = "Submit Refund Request";
                 }
             } catch (error) {
-                // Show error if the fetch call itself fails
                 errorMsg.style.display = "block";
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Submit Refund Request";

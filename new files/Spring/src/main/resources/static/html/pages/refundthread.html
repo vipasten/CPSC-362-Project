@@ -4,16 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refund Thread</title>
-    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin: 0;
-        }
+        body { font-family: Arial, sans-serif; color: white; text-align: center; padding: 30px; margin: 0; }
 
         .details-box {
             background-color: rgba(255, 255, 255, 0.08);
@@ -24,11 +17,7 @@
             text-align: left;
         }
 
-        .details-box h2 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        .details-box h2 { margin-top: 0; margin-bottom: 15px; text-align: center; }
 
         .details-box p {
             font-size: 15px;
@@ -39,7 +28,6 @@
         }
 
         .details-box p:last-child { border-bottom: none; }
-
         .details-box span { color: #FFE96B; font-weight: bold; }
 
         .status-pending { color: #FFE96B; font-weight: bold; }
@@ -56,39 +44,14 @@
             text-align: left;
         }
 
-        .thread-box h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .thread-box h2 { margin-top: 0; margin-bottom: 20px; text-align: center; }
 
-        .message {
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
+        .message { border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .message.customer { background-color: rgba(255,255,255,0.08); border-left: 3px solid #FFE96B; }
+        .message.admin { background-color: rgba(171,25,30,0.2); border-left: 3px solid #ab191ecd; }
 
-        .message.customer {
-            background-color: rgba(255, 255, 255, 0.08);
-            border-left: 3px solid #FFE96B;
-        }
-
-        .message.admin {
-            background-color: rgba(171, 25, 30, 0.2);
-            border-left: 3px solid #ab191ecd;
-        }
-
-        .message-header {
-            font-size: 12px;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 6px;
-        }
-
-        .message-header strong {
-            color: rgba(255,255,255,0.8);
-            font-size: 13px;
-        }
-
+        .message-header { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+        .message-header strong { color: rgba(255,255,255,0.8); font-size: 13px; }
         .message-body { font-size: 15px; color: white; line-height: 1.5; }
 
         .reply-box {
@@ -116,60 +79,17 @@
             margin-bottom: 15px;
         }
 
-        .send-btn {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
-            background: #ab191ecd;
-            color: white;
-        }
-
+        .send-btn { width: 100%; padding: 14px; font-size: 16px; font-weight: bold; border: none; border-radius: 16px; cursor: pointer; background: #ab191ecd; color: white; }
         .send-btn:hover { background: #8a1015; }
 
-        .close-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 12px;
-            font-size: 15px;
-            font-weight: bold;
-            border: 2px solid #e05252;
-            border-radius: 16px;
-            cursor: pointer;
-            background: transparent;
-            color: #e05252;
-        }
+        .close-btn { width: 100%; margin-top: 12px; padding: 12px; font-size: 15px; font-weight: bold; border: 2px solid #e05252; border-radius: 16px; cursor: pointer; background: transparent; color: #e05252; }
+        .close-btn:hover { background: rgba(224,82,82,0.15); }
 
-        .close-btn:hover { background: rgba(224, 82, 82, 0.15); }
-
-        .back-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 12px;
-            font-size: 15px;
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 16px;
-            cursor: pointer;
-            background: transparent;
-            color: white;
-        }
-
+        .back-btn { width: 100%; margin-top: 12px; padding: 12px; font-size: 15px; border: 1px solid rgba(255,255,255,0.25); border-radius: 16px; cursor: pointer; background: transparent; color: white; }
         .back-btn:hover { background: rgba(255,255,255,0.08); }
 
-        .closed-notice {
-            text-align: center;
-            color: rgba(255,255,255,0.4);
-            font-size: 14px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            margin-top: 10px;
-        }
+        .closed-notice { text-align: center; color: rgba(255,255,255,0.4); font-size: 14px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; }
 
-        /* Loading and error states */
         .loading { color: rgba(255,255,255,0.5); font-size: 14px; }
         .error { color: #e05252; font-size: 14px; }
     </style>
@@ -178,128 +98,105 @@
 
     <!-- Navigation bar -->
     <div class="listing">
-        <button>
-            <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
-        </button>
-        <button>
-            <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
-        </button>
-        <button>
-            <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
-        </button>
+        <button><a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a></button>
+        <button><a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a></button>
+        <button><a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a></button>
     </div>
 
     <h1>Refund Request Thread</h1>
     <p>REF #: <strong id="refDisplay" style="color: #FFE96B;"></strong></p>
 
-    <!-- Loading message shown while fetching data -->
     <p class="loading" id="loadingMsg">Loading your request...</p>
-
-    <!-- Error message shown if REF not found -->
     <p class="error" id="errorMsg" style="display:none;"></p>
 
-    <!-- Request details box - hidden until data loads -->
+    <!-- Request details box -->
     <div class="details-box" id="detailsBox" style="display:none;">
         <h2>Request Details</h2>
         <p>Name: <span id="nameDisplay"></span></p>
         <p>Order #: <span id="orderDisplay"></span></p>
         <p>Movie: <span id="movieDisplay"></span></p>
         <p>Reason: <span id="reasonDisplay"></span></p>
-        <p>Details: <span id="detailsDisplay"></span></p>
         <p>Status: <span id="statusDisplay"></span></p>
     </div>
 
-    <!-- Conversation thread - hidden until data loads -->
+    <!-- Conversation thread -->
     <div class="thread-box" id="threadBox" style="display:none;">
         <h2>Conversation</h2>
         <div id="messageThread"></div>
     </div>
 
-    <!-- Reply section - hidden until data loads -->
+    <!-- Reply section -->
     <div id="replySection" style="display:none;"></div>
 
     <script>
-        // Read the REF number from the URL
         const params = new URLSearchParams(window.location.search);
         const ref = params.get("ref");
         document.getElementById("refDisplay").textContent = ref;
 
-        // Fetch the refund request data from the backend on page load
+        let customerName = "Customer";
+
         async function loadRequest() {
             try {
                 const response = await fetch("/api/refunds/lookup?ref=" + encodeURIComponent(ref));
                 const data = await response.json();
 
-                // Hide loading message
                 document.getElementById("loadingMsg").style.display = "none";
 
                 if (!data.success) {
-                    // Show error if REF number not found
                     const errorMsg = document.getElementById("errorMsg");
                     errorMsg.style.display = "block";
                     errorMsg.textContent = "No refund request found with REF number: " + ref + ". Please check and try again.";
                     return;
                 }
 
-                // Show the details box and fill in the data
+                // Store customer name for use when sending replies
+                customerName = data.firstName + " " + data.lastName;
+
+                // Fill in details
                 document.getElementById("detailsBox").style.display = "block";
                 document.getElementById("nameDisplay").textContent = data.firstName + " " + data.lastName;
-                document.getElementById("orderDisplay").textContent = data.orderNumber;
+                document.getElementById("orderDisplay").textContent = data.orderNumber || "N/A";
                 document.getElementById("movieDisplay").textContent = data.movie;
                 document.getElementById("reasonDisplay").textContent = data.reason;
-                document.getElementById("detailsDisplay").textContent = data.details || "No additional details provided.";
 
-                // Display status with color coding
+                // Status with color coding
                 const statusEl = document.getElementById("statusDisplay");
                 const status = data.status ? data.status.toLowerCase() : "pending";
-                if (status === "pending") {
-                    statusEl.innerHTML = "<span class='status-pending'>Pending Review</span>";
-                } else if (status === "approved") {
-                    statusEl.innerHTML = "<span class='status-approved'>Approved</span>";
-                } else if (status === "denied") {
-                    statusEl.innerHTML = "<span class='status-denied'>Denied</span>";
-                } else if (status === "closed") {
-                    statusEl.innerHTML = "<span class='status-closed'>Closed</span>";
-                }
+                if (status === "pending") statusEl.innerHTML = "<span class='status-pending'>Pending Review</span>";
+                else if (status === "approved") statusEl.innerHTML = "<span class='status-approved'>Approved</span>";
+                else if (status === "denied") statusEl.innerHTML = "<span class='status-denied'>Denied</span>";
+                else if (status === "closed") statusEl.innerHTML = "<span class='status-closed'>Closed</span>";
 
-                // Show conversation thread
+                // Render conversation thread from messages array
                 document.getElementById("threadBox").style.display = "block";
                 const thread = document.getElementById("messageThread");
+                thread.innerHTML = "";
 
-                // Show the original customer request as the first message
-                const customerMsg = document.createElement("div");
-                customerMsg.className = "message customer";
-                customerMsg.innerHTML = `
-                    <div class="message-header">
-                        <strong>${data.firstName} ${data.lastName}</strong> &nbsp; ${new Date(data.submittedAt).toLocaleString('en-US')}
-                    </div>
-                    <div class="message-body">${data.details || "No additional details provided."}</div>
-                `;
-                thread.appendChild(customerMsg);
-
-                // Show admin reply if one exists
-                if (data.adminReply) {
-                    const adminMsg = document.createElement("div");
-                    adminMsg.className = "message admin";
-                    adminMsg.innerHTML = `
-                        <div class="message-header">
-                            <strong>Admin</strong> &nbsp; ${new Date(data.repliedAt).toLocaleString('en-US')}
-                        </div>
-                        <div class="message-body">${data.adminReply}</div>
-                    `;
-                    thread.appendChild(adminMsg);
+                if (data.messages && data.messages.length > 0) {
+                    data.messages.forEach(msg => {
+                        const div = document.createElement("div");
+                        div.className = "message " + (msg.sender === "ADMIN" ? "admin" : "customer");
+                        const sentTime = msg.sentAt ? new Date(msg.sentAt).toLocaleString('en-US') : "";
+                        div.innerHTML = `
+                            <div class="message-header"><strong>${msg.senderName}</strong> &nbsp; ${sentTime}</div>
+                            <div class="message-body">${msg.message}</div>
+                        `;
+                        thread.appendChild(div);
+                    });
+                } else {
+                    thread.innerHTML = "<p style='color:rgba(255,255,255,0.3); font-size:13px;'>No messages yet.</p>";
                 }
 
-                // Show reply section if request is not closed
+                // Show reply section
                 const replySection = document.getElementById("replySection");
                 replySection.style.display = "block";
 
                 if (status === "closed") {
                     replySection.innerHTML = `
-                        <div class="closed-notice" style="max-width:600px; margin: 0 auto;">
+                        <div class="closed-notice" style="max-width:600px; margin:0 auto;">
                             This refund request has been closed. If you need further assistance, please submit a new request.
                         </div>
-                        <div style="max-width:600px; margin: 10px auto;">
+                        <div style="max-width:600px; margin:10px auto;">
                             <button class="back-btn" onclick="window.location.href='refundlookup.html'">Back to Lookup</button>
                         </div>
                     `;
@@ -323,7 +220,7 @@
             }
         }
 
-        // Send a customer reply to the backend
+        // Send customer reply - saves to database and adds to thread without full reload
         async function sendReply() {
             const text = document.getElementById("replyText").value.trim();
             if (!text) {
@@ -332,20 +229,21 @@
             }
 
             try {
-                const response = await fetch("/api/refunds/reply?ref=" + encodeURIComponent(ref) + "&replyText=" + encodeURIComponent(text), {
-                    method: "POST"
-                });
+                const response = await fetch(
+                    "/api/refunds/customerReply?ref=" + encodeURIComponent(ref) +
+                    "&replyText=" + encodeURIComponent(text) +
+                    "&customerName=" + encodeURIComponent(customerName),
+                    { method: "POST" }
+                );
                 const result = await response.json();
 
                 if (result.success) {
-                    // Add the new message to the thread visually
+                    // Add new message to thread without reloading the page
                     const thread = document.getElementById("messageThread");
                     const div = document.createElement("div");
                     div.className = "message customer";
                     div.innerHTML = `
-                        <div class="message-header">
-                            <strong>You</strong> &nbsp; ${new Date().toLocaleString('en-US')}
-                        </div>
+                        <div class="message-header"><strong>${customerName}</strong> &nbsp; ${new Date().toLocaleString('en-US')}</div>
                         <div class="message-body">${text}</div>
                     `;
                     thread.appendChild(div);
@@ -358,22 +256,20 @@
             }
         }
 
-        // Close the refund request via the backend
+        // Close the refund request
         async function closeRequest() {
             if (!confirm("Are you sure you want to close this refund request?")) return;
 
             try {
-                const response = await fetch("/api/refunds/close?ref=" + encodeURIComponent(ref), {
-                    method: "POST"
-                });
+                const response = await fetch("/api/refunds/close?ref=" + encodeURIComponent(ref), { method: "POST" });
                 const result = await response.json();
 
                 if (result.success) {
                     document.getElementById("replySection").innerHTML = `
-                        <div class="closed-notice" style="max-width:600px; margin: 0 auto;">
+                        <div class="closed-notice" style="max-width:600px; margin:0 auto;">
                             This refund request has been closed. If you need further assistance, please submit a new request.
                         </div>
-                        <div style="max-width:600px; margin: 10px auto;">
+                        <div style="max-width:600px; margin:10px auto;">
                             <button class="back-btn" onclick="window.location.href='refundlookup.html'">Back to Lookup</button>
                         </div>
                     `;
@@ -386,7 +282,6 @@
             }
         }
 
-        // Load the request data when the page opens
         loadRequest();
     </script>
 

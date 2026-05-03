@@ -61,15 +61,16 @@
         </div>
     </h1>
 
-    <!-- Fixed Employee Home button in the bottom left corner -->
-    <!-- Allows employees to navigate back to their home page from this page -->
-    <div style="position: fixed; bottom: 20px; left: 20px;">
-        <a href="employeehomepage.html">
-            <button style="padding: 10px 20px; border-radius: 8px; background-color: #1a1a2e; color: white; border: 1px solid white; font-size: 14px; cursor: pointer;">
-                Employee Home
-            </button>
-        </a>
-    </div>
+    <script>
+        // Only show Employee Home button if user is logged in as an employee
+        // Role is stored in sessionStorage when employee lands on employeehomepage.html
+        if (sessionStorage.getItem("role") === "EMPLOYEE") {
+            const btn = document.createElement("div");
+            btn.style = "position: fixed; bottom: 20px; left: 20px;";
+            btn.innerHTML = '<a href="employeehomepage.html"><button style="padding: 10px 20px; border-radius: 8px; background-color: #1a1a2e; color: white; border: 1px solid white; font-size: 14px; cursor: pointer;">Employee Home</button></a>';
+            document.body.appendChild(btn);
+        }
+    </script>
 
 </body>
 </html>

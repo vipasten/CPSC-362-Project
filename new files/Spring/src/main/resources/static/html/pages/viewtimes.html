@@ -31,13 +31,7 @@
             <p>2 HR 45 MIN | PG-13</p>
             <p>Sci-Fi</p>
             <p>10:15 AM &nbsp; 1:30 PM &nbsp; 4:45 PM &nbsp; 8:00 PM</p>
-            <div class="movie-card-buttons">
-                <button onclick="goToTickets('Dune: Part Four', '10:15 AM,1:30 PM,4:45 PM,8:00 PM')">Get Tickets</button>
-                <!-- Review Button for Dune: Part Four -->
-                <a href="review.html?movie=Dune%3A%20Part%20Four">
-                    <button type="button" class="review-btn">Leave Review</button>
-                </a>
-            </div>
+            <button onclick="goToTickets('Dune: Part Four', '10:15 AM,1:30 PM,4:45 PM,8:00 PM')">Get Tickets</button>
         </div>
 
         <!-- Movie card 2: Godzilla v. Batman -->
@@ -47,13 +41,7 @@
             <p>1 HR 58 MIN | R</p>
             <p>Thriller</p>
             <p>11:00 AM &nbsp; 2:15 PM &nbsp; 7:30 PM</p>
-            <div class="movie-card-buttons">
-                <button onclick="goToTickets('Godzilla v. Batman', '11:00 AM,2:15 PM,7:30 PM')">Get Tickets</button>
-                <!-- Review Button for Godzilla v. Batman -->
-                <a href="review.html?movie=Godzilla%20v.%20Batman">
-                    <button type="button" class="review-btn">Leave Review</button>
-                </a>
-            </div>
+            <button onclick="goToTickets('Godzilla v. Batman', '11:00 AM,2:15 PM,7:30 PM')">Get Tickets</button>
         </div>
 
         <!-- Movie card 3: Fart Wars -->
@@ -63,13 +51,7 @@
             <p>2 HR 10 MIN | PG-13</p>
             <p>Action</p>
             <p>12:00 PM &nbsp; 3:30 PM &nbsp; 6:00 PM &nbsp; 9:15 PM</p>
-            <div class="movie-card-buttons">
-                <button onclick="goToTickets('Fart Wars', '12:00 PM,3:30 PM,6:00 PM,9:15 PM')">Get Tickets</button>
-                <!-- Review Button for Fart Wars -->
-                <a href="review.html?movie=Fart%20Wars">
-                    <button type="button" class="review-btn">Leave Review</button>
-                </a>
-            </div>
+            <button onclick="goToTickets('Fart Wars', '12:00 PM,3:30 PM,6:00 PM,9:15 PM')">Get Tickets</button>
         </div>
 
         <!-- Movie card 4: Amogus -->
@@ -79,13 +61,7 @@
             <p>1 HR 42 MIN | PG</p>
             <p>Romance</p>
             <p>11:30 AM &nbsp; 2:00 PM &nbsp; 4:30 PM &nbsp; 7:00 PM</p>
-            <div class="movie-card-buttons">
-                <button onclick="goToTickets('Amogus', '11:30 AM,2:00 PM,4:30 PM,7:00 PM')">Get Tickets</button>
-                <!-- Review Button for Amogus -->
-                <a href="review.html?movie=Amogus">
-                    <button type="button" class="review-btn">Leave Review</button>
-                </a>
-            </div>
+            <button onclick="goToTickets('Amogus', '11:30 AM,2:00 PM,4:30 PM,7:00 PM')">Get Tickets</button>
         </div>
 
         <!-- Movie card 5: 67 The Movie -->
@@ -95,13 +71,7 @@
             <p>6 HR 7 MIN | PG-67</p>
             <p>Psychological Horror</p>
             <p>6:07 PM &nbsp; 6:70 PM &nbsp; 67:67 PM</p>
-            <div class="movie-card-buttons">
-                <button onclick="goToTickets('67: The Movie', '6:07 PM,6:70 PM,67:67 PM')">Get Tickets</button>
-                <!-- Review Button for 67: The Movie -->
-                 <a href="review.html?movie=67%3A%20The%20Movie">
-                    <button type="button" class="review-btn">Leave Review</button>
-                </a>
-            </div>
+            <button onclick="goToTickets('67: The Movie', '6:07 PM,6:70 PM,67:67 PM')">Get Tickets</button>
         </div>
 
     </div>
@@ -133,16 +103,26 @@
             const date = dateInput.value;
             window.location.href = "tickets.html?movie=" + encodeURIComponent(movie) + "&showtimes=" + encodeURIComponent(showtimes) + "&date=" + encodeURIComponent(date);
         }
+
+        // Only show Employee Home button if user is logged in as an employee
+        // Role is stored in sessionStorage when employee lands on employeehomepage.html
+        if (sessionStorage.getItem("role") === "EMPLOYEE") {
+            const btn = document.createElement("div");
+            btn.style = "position: fixed; bottom: 20px; left: 20px;";
+            btn.innerHTML = '<a href="employeehomepage.html"><button style="padding: 10px 20px; border-radius: 8px; background-color: #1a1a2e; color: white; border: 1px solid white; font-size: 14px; cursor: pointer;">Employee Home</button></a>';
+            document.body.appendChild(btn);
+        }
     </script>
 
-    <!-- Fixed button in the bottom left corner for employees to navigate back to their home page -->
-    <div style="position: fixed; bottom: 20px; left: 20px;">
-        <a href="employeehomepage.html">
-            <button style="padding: 10px 20px; border-radius: 8px; background-color: #1a1a2e; color: white; border: 1px solid white; font-size: 14px; cursor: pointer;">
-                Employee Home
-            </button>
-        </a>
-    </div>
-
 </body>
+
+<div class="listing">
+    <button>
+        <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+    </button>
+    <button>
+        <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+    </button>
+</div>
+
 </html>

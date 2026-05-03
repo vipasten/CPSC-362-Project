@@ -11,17 +11,22 @@
 
     <body>
 
+        <!-- Save EMPLOYEE role to sessionStorage so other pages know the user is an employee -->
+        <script>
+            sessionStorage.setItem("role", "EMPLOYEE");
+        </script>
+
         <!-- Logo centered at the top of the page -->
         <li class="push_center" style="height: 50px; width: 500px;">
             <img src="../images/Logo (1).png" alt="Movie Theater Logo">
         </li>
 
         <!-- Sign Out button fixed in the bottom right corner -->
-        <!-- Redirects to login.html - NOTE: does not invalidate the backend session -->
+        <!-- Redirects to login.html; does not invalidate the backend session -->
         <!-- Add a proper POST /logout endpoint to handle session invalidation -->
         <div style="position: fixed; bottom: 20px; right: 20px;">
             <a href="login.html">
-                <button style="padding: 10px 20px; border-radius: 8px; background-color: #ab191ecd; color: white; border: none; font-size: 14px; cursor: pointer;">
+                <button onclick="signOut()" style="padding: 10px 20px; border-radius: 8px; background-color: #ab191ecd; color: white; border: none; font-size: 14px; cursor: pointer;">
                     Sign Out
                 </button>
             </a>
@@ -31,19 +36,37 @@
         <div class="textbox" style="margin-top: 100px;">
             <h1>Employee Home Page</h1>
             <p>
-                Welcome Employee! This page is for daily theater operations like helping customers,
+                WELCOME BACK, SLA- I mean Employee! This page is for daily theater operations like helping customers,
                 checking tickets, and monitoring seat purchases.
             </p>
         </div>
 
-        <!-- Navigation buttons row - centered using justify-content: center -->
+        <!-- Navigation buttons row; centered using justify-content: center -->
         <!-- Each button links to a page the employee needs access to -->
         <div class="row" style="justify-content: center;">
+
+            <!-- View Showtimes; takes employee to the movie showtimes page -->
             <div class="stat"><div class="lbl"><a href="viewtimes.html">VIEW SHOWTIMES</a></div></div>
+
+            <!-- Support Tickets; takes employee to the support ticket form -->
             <div class="stat"><div class="lbl"><a href="supportticket.html">SUPPORT TICKETS</a></div></div>
+
+            <!-- Refunds; takes employee to the read-only refunds page -->
             <div class="stat"><div class="lbl"><a href="employeerefunds.html">REFUNDS</a></div></div>
+
+            <!-- Member Home; takes employee to the main customer facing homepage -->
             <div class="stat"><div class="lbl"><a href="../index.html">MEMBER HOME</a></div></div>
+
         </div>
+
+                <script>
+            sessionStorage.setItem("role", "EMPLOYEE");
+
+            function signOut() {
+                sessionStorage.removeItem("role");
+                window.location.href = "login.html";
+            }
+        </script>
 
     </body>
 </html>

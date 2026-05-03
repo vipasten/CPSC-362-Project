@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "refund_requests")
 public class RefundRequest {
 
-    // Auto-generated unique ID for each refund request
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +21,11 @@ public class RefundRequest {
     @Column(nullable = false, unique = true)
     private String refNumber;
 
-    // Customer details
+    // The username of the logged in member who submitted the request
+    // Used to look up all refund requests for a specific member
+    @Column(nullable = true)
+    private String username;
+
     @Column(nullable = false)
     private String firstName;
 
@@ -49,7 +52,7 @@ public class RefundRequest {
     @Column(nullable = false)
     private String status;
 
-    // Admin reply message
+    // Admin reply message - kept for backwards compatibility
     @Column
     private String adminReply;
 
@@ -67,6 +70,9 @@ public class RefundRequest {
 
     public String getRefNumber() { return refNumber; }
     public void setRefNumber(String refNumber) { this.refNumber = refNumber; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }

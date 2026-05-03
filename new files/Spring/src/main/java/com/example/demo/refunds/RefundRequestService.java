@@ -5,21 +5,25 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
-// Marks this as a Spring service which handles all the business logic
 @Service
 public class RefundRequestService {
 
     private final RefundRequestRepository refundRequestRepository;
+    private final RefundMessageRepository refundMessageRepository;
 
-    // Constructor injection that allows Spring to automatically passes the repository in
-    public RefundRequestService(RefundRequestRepository refundRequestRepository) {
+    public RefundRequestService(
+        RefundRequestRepository refundRequestRepository,
+        RefundMessageRepository refundMessageRepository
+    ) {
         this.refundRequestRepository = refundRequestRepository;
+        this.refundMessageRepository = refundMessageRepository;
     }
 
-    // Saves a new refund request to the database
-    // Called when customer submits refundrequest.html
+    // Saves a new refund request to the database and creates the first customer message
+    // Now also saves the username of the logged in member
     public RefundRequest submitRequest(
         String refNumber,
+        String username,
         String firstName,
         String lastName,
         String orderNumber,
@@ -29,6 +33,7 @@ public class RefundRequestService {
     ) {
         RefundRequest request = new RefundRequest();
         request.setRefNumber(refNumber);
+        request.setUsername(username);
         request.setFirstName(firstName);
         request.setLastName(lastName);
         request.setOrderNumber(orderNumber);
@@ -37,39 +42,81 @@ public class RefundRequestService {
         request.setDetails(details);
         request.setStatus("PENDING");
         request.setSubmittedAt(LocalDateTime.now());
-        return refundRequestRepository.save(request);
+        refundRequestRepository.save(request);
+
+        // Save the customer's initial message to the messages table
+        if (details != null && !details.trim().isEmpty()) {
+            RefundMessage firstMessage = new RefundMessage();
+            firstMessage.setRefNumber(refNumber);
+            firstMessage.setSender("CUSTOMER");
+            firstMessage.setSenderName(firstName + " " + lastName);
+            firstMessage.setMessage(details);
+            firstMessage.setSentAt(LocalDateTime.now());
+            refundMessageRepository.save(firstMessage);
+        }
+
+        return request;
     }
 
-    // Returns all refund requests which is used by admin and employee pages
+    // Returns all refund requests - used by admin and employee pages
     public List<RefundRequest> getAllRequests() {
         return refundRequestRepository.findAll();
     }
 
     // Finds a single refund request by REF number
-    // Used when customer looks up their request on refundlookup.html
     public Optional<RefundRequest> getByRefNumber(String refNumber) {
         return refundRequestRepository.findByRefNumber(refNumber);
     }
 
-    // Saves the admin reply and updates the replied timestamp
-    // Called when admin clicks Send Reply on refunds.html
+    // Returns all refund requests submitted by a specific username
+    // Used on the member account page to show their request history
+    public List<RefundRequest> getByUsername(String username) {
+        return refundRequestRepository.findByUsername(username);
+    }
+
+    // Returns all messages for a specific refund request in chronological order
+    public List<RefundMessage> getMessages(String refNumber) {
+        return refundMessageRepository.findByRefNumberOrderBySentAtAsc(refNumber);
+    }
+
+    // Saves a new admin reply message to the thread
     public boolean replyToRequest(String refNumber, String replyText) {
         Optional<RefundRequest> found = refundRequestRepository.findByRefNumber(refNumber);
         if (!found.isPresent()) return false;
 
+        RefundMessage message = new RefundMessage();
+        message.setRefNumber(refNumber);
+        message.setSender("ADMIN");
+        message.setSenderName("Admin");
+        message.setMessage(replyText);
+        message.setSentAt(LocalDateTime.now());
+        refundMessageRepository.save(message);
+
         RefundRequest request = found.get();
-        request.setAdminReply(replyText);
         request.setRepliedAt(LocalDateTime.now());
         refundRequestRepository.save(request);
         return true;
     }
 
-    // Updates the status to APPROVED
-    // Called when admin clicks Approve on refunds.html
-    public boolean approveRequest(String refNumber) {
+    // Saves a new customer reply message to the thread
+    public boolean customerReply(String refNumber, String replyText, String customerName) {
         Optional<RefundRequest> found = refundRequestRepository.findByRefNumber(refNumber);
         if (!found.isPresent()) return false;
 
+        RefundMessage message = new RefundMessage();
+        message.setRefNumber(refNumber);
+        message.setSender("CUSTOMER");
+        message.setSenderName(customerName);
+        message.setMessage(replyText);
+        message.setSentAt(LocalDateTime.now());
+        refundMessageRepository.save(message);
+        return true;
+    }
+
+    // Updates the status to APPROVED
+    public boolean approveRequest(String refNumber) {
+        Optional<RefundRequest> found = refundRequestRepository.findByRefNumber(refNumber);
+        if (!found.isPresent()) return false;
         RefundRequest request = found.get();
         request.setStatus("APPROVED");
         refundRequestRepository.save(request);
@@ -77,11 +124,9 @@ public class RefundRequestService {
     }
 
     // Updates the status to DENIED
-    // Called when admin clicks Deny on refunds.html
     public boolean denyRequest(String refNumber) {
         Optional<RefundRequest> found = refundRequestRepository.findByRefNumber(refNumber);
         if (!found.isPresent()) return false;
-
         RefundRequest request = found.get();
         request.setStatus("DENIED");
         refundRequestRepository.save(request);
@@ -89,11 +134,9 @@ public class RefundRequestService {
     }
 
     // Updates the status to CLOSED
-    // Called when customer clicks Close Request on refundthread.html
     public boolean closeRequest(String refNumber) {
         Optional<RefundRequest> found = refundRequestRepository.findByRefNumber(refNumber);
         if (!found.isPresent()) return false;
-
         RefundRequest request = found.get();
         request.setStatus("CLOSED");
         refundRequestRepository.save(request);

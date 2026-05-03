@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
+    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
         body {
@@ -47,6 +48,10 @@
         .order-summary span {
             color: #FFE96B;
             font-weight: bold;
+        }
+
+        .order-summary span.discount {
+            color: #4caf50;
         }
 
         .payment-form {
@@ -99,6 +104,47 @@
             flex: 1;
         }
 
+        .promo-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .promo-row input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .promo-row input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .apply-btn {
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            white-space: nowrap;
+        }
+
+        .apply-btn:hover { background: rgba(255,255,255,0.25); }
+
+        .promo-msg {
+            font-size: 13px;
+            margin-bottom: 10px;
+            min-height: 18px;
+        }
+
         .pay-btn {
             margin-top: 10px;
             padding: 14px 32px;
@@ -112,9 +158,8 @@
             width: 100%;
         }
 
-        .pay-btn:hover {
-            background: #8a1015;
-        }
+        .pay-btn:hover { background: #8a1015; }
+        .pay-btn:disabled { background: rgba(255,255,255,0.2); cursor: not-allowed; }
 
         .back-btn {
             margin-top: 12px;
@@ -128,9 +173,7 @@
             width: 100%;
         }
 
-        .back-btn:hover {
-            background: rgba(255,255,255,0.08);
-        }
+        .back-btn:hover { background: rgba(255,255,255,0.08); }
     </style>
 </head>
 <body>
@@ -146,13 +189,22 @@
         <p>Seats: <span id="seatsDisplay"></span></p>
         <p>Total Seats: <span id="totalSeatsDisplay"></span></p>
         <p>Subtotal: <span id="subtotalDisplay"></span></p>
-        <p>Promo Discount: <span id="promoDiscountDisplay">$0.00</span></p>
+        <p id="discountLine" style="display:none;">Discount (<span id="discountPct"></span>% off): <span class="discount" id="discountDisplay"></span></p>
         <p>Tax (7.75% CA): <span id="taxDisplay"></span></p>
         <p class="total-line">Total: <span id="totalDisplay"></span></p>
     </div>
 
     <div class="payment-form">
         <h2>Card Details</h2>
+
+        <div class="form-group">
+            <label>Promo Code (optional)</label>
+            <div class="promo-row">
+                <input type="text" id="promoCode" placeholder="Enter promo code">
+                <button class="apply-btn" onclick="applyPromo()">Apply</button>
+            </div>
+            <p class="promo-msg" id="promoMsg"></p>
+        </div>
 
         <div class="form-group">
             <label for="cardName">Name on Card</label>
@@ -175,67 +227,109 @@
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group" style="flex: 2;">
-                <label for="promoCode">Promo Code (optional)</label>
-                <input type="text" id="promoCode" placeholder="SAVE10">
-            </div>
-            <div class="form-group" style="flex: 1; display:flex; align-items:flex-end;">
-                <button type="button" class="back-btn" style="margin-top:0;" onclick="applyPromo()">Apply</button>
-            </div>
-        </div>
-        <p id="promoMessage" style="margin: 0 0 8px 0; color: #FFE96B; font-size: 14px;"></p>
-
-        <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+        <button class="pay-btn" id="payBtn" onclick="processPayment()">Pay Now</button>
         <button class="back-btn" onclick="history.back()">Go Back</button>
     </div>
 
     <script>
+        // Read all booking details passed through the URL from seatconfirmation.html
         const params = new URLSearchParams(window.location.search);
         const movie = params.get("movie");
         const showtime = params.get("showtime");
         const seats = params.get("seats");
         const date = params.get("date");
+
+        // Split seats string into an array and filter out any empty entries
         const seatList = seats ? seats.split(",").map(seat => seat.trim()).filter(seat => seat.length > 0) : [];
         const seatCount = seatList.length;
 
+        // Pricing constants
         const pricePerSeat = 12.99;
         const subtotal = seatCount * pricePerSeat;
         const taxRate = 0.0775;
-        let promoCodeApplied = "";
-        let promoPercentOff = 0;
-        let promoDiscount = 0;
-        let discountedSubtotal = subtotal;
-        let tax = discountedSubtotal * taxRate;
-        let totalPrice = discountedSubtotal + tax;
 
-        function renderTotals() {
-            tax = discountedSubtotal * taxRate;
-            totalPrice = discountedSubtotal + tax;
-            document.getElementById("subtotalDisplay").textContent = "$" + discountedSubtotal.toFixed(2);
-            document.getElementById("promoDiscountDisplay").textContent = "-$" + promoDiscount.toFixed(2);
+        // Tracks the current discount percentage
+        let discountPercent = 0;
+
+        // Generate the order number here on the payment page BEFORE the purchase is submitted
+        // This way the same order number gets saved to the database AND shown on the receipt
+        const orderNumber = "ORD-" + Math.floor(Math.random() * 900000 + 100000);
+
+        // Recalculates and updates all price displays based on current discount
+        function recalculate() {
+            const discountAmount = subtotal * (discountPercent / 100);
+            const discountedSubtotal = subtotal - discountAmount;
+            const tax = discountedSubtotal * taxRate;
+            const totalPrice = discountedSubtotal + tax;
+
+            document.getElementById("subtotalDisplay").textContent = "$" + subtotal.toFixed(2);
             document.getElementById("taxDisplay").textContent = "$" + tax.toFixed(2);
             document.getElementById("totalDisplay").textContent = "$" + totalPrice.toFixed(2);
+
+            if (discountPercent > 0) {
+                document.getElementById("discountLine").style.display = "block";
+                document.getElementById("discountPct").textContent = discountPercent;
+                document.getElementById("discountDisplay").textContent = "-$" + discountAmount.toFixed(2);
+            } else {
+                document.getElementById("discountLine").style.display = "none";
+            }
+
+            return totalPrice;
         }
 
+        // Fill in the order summary fields on page load
         document.getElementById("movieDisplay").textContent = movie;
         document.getElementById("showtimeDisplay").textContent = showtime;
         document.getElementById("seatsDisplay").textContent = seatList.join(", ");
         document.getElementById("totalSeatsDisplay").textContent = seatCount + " seat(s)";
-        renderTotals();
+        recalculate();
 
+        // Format the date nicely for display
         if (date) {
             const formatted = new Date(date + "T00:00:00");
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
         }
 
+        // Hardcoded test promo codes for frontend demo purposes
+        const testPromoCodes = {
+            "SUMMER20": 20,
+            "FARTW10": 10,
+            "AMOGUS50": 50
+        };
+
+        // Validates and applies a promo code
+        function applyPromo() {
+            const code = document.getElementById("promoCode").value.trim().toUpperCase();
+            const msgEl = document.getElementById("promoMsg");
+
+            if (!code) {
+                msgEl.style.color = "#e05252";
+                msgEl.textContent = "Please enter a promo code!";
+                return;
+            }
+
+            if (testPromoCodes[code]) {
+                discountPercent = testPromoCodes[code];
+                msgEl.style.color = "#4caf50";
+                msgEl.textContent = "Promo code applied! " + discountPercent + "% off!";
+                recalculate();
+            } else {
+                discountPercent = 0;
+                msgEl.style.color = "#e05252";
+                msgEl.textContent = "Invalid or expired promo code.";
+                recalculate();
+            }
+        }
+
+        // Auto formats card number with spaces every 4 digits
         document.getElementById("cardNumber").addEventListener("input", function() {
             let value = this.value.replace(/\D/g, "");
             value = value.replace(/(.{4})/g, "$1 ").trim();
             this.value = value;
         });
 
+        // Auto formats expiry date with slash between month and year
         document.getElementById("expiry").addEventListener("input", function() {
             let value = this.value.replace(/\D/g, "");
             if (value.length >= 2) {
@@ -244,126 +338,104 @@
             this.value = value;
         });
 
-        async function applyPromo() {
-            const codeInput = document.getElementById("promoCode").value.trim();
-            const promoMessage = document.getElementById("promoMessage");
-
-            if (!codeInput) {
-                promoMessage.textContent = "Enter a promo code first.";
-                return;
-            }
-
-            try {
-                const response = await fetch(
-                    "/api/promos/validate?code=" + encodeURIComponent(codeInput) +
-                    "&subtotal=" + encodeURIComponent(subtotal.toFixed(2))
-                );
-                const result = await response.json();
-
-                if (!result.valid) {
-                    promoCodeApplied = "";
-                    promoPercentOff = 0;
-                    promoDiscount = 0;
-                    discountedSubtotal = subtotal;
-                    renderTotals();
-                    promoMessage.textContent = result.message || "Invalid promo code.";
-                    return;
-                }
-
-                promoCodeApplied = result.code || codeInput.toUpperCase();
-                promoPercentOff = Number(result.percentOff || 0);
-                promoDiscount = Number(result.discountAmount || 0);
-                discountedSubtotal = Number(result.discountedSubtotal || subtotal);
-                renderTotals();
-                promoMessage.textContent = "Promo applied: " + promoCodeApplied + " (" + promoPercentOff + "% off)";
-            } catch (error) {
-                promoMessage.textContent = "Could not validate promo code right now.";
-            }
-        }
-
+        // Validates payment fields then sends purchase request to backend
         async function processPayment() {
             const cardName = document.getElementById("cardName").value;
             const cardNumber = document.getElementById("cardNumber").value;
             const expiry = document.getElementById("expiry").value;
             const cvv = document.getElementById("cvv").value;
+            const payBtn = document.getElementById("payBtn");
 
-        if (!cardName || !cardNumber || !expiry || !cvv) {
-            alert("Yo! You didn't fill in all the payment fields, dummy!");
-            return;
-        }
-
-        const cardDigits = cardNumber.replace(/\s/g, "");
-        if (cardDigits.length !== 16 || isNaN(cardDigits)) {
-            alert("LOOK AT YOUR CARD NUMBER. DOES THAT LOOK LIKE 16 DIGITS TO YOU?!");
-            return;
-        }
-
-        if (cvv.length !== 3 || isNaN(cvv)) {
-            alert("A NORMAL HUMAN HAVE THREE FINGERS. LOOK AT YOUR FINGERS AND COUNT TO THREE. THAT'S HOW MUCH DIGITS SHOULD BE IN THE CCV!");
-            return;
-        }
-
-        const parts = expiry.split("/");
-        if (parts.length !== 2) {
-            alert("BASED ON YOUR ''EXPIRY DATE'', THAT CARD DON'T BE LOOKIN VALID, BUDDY!");
-            return;
-        }
-
-        const month = parseInt(parts[0]);
-        const year = parseInt("20" + parts[1]);
-        const now = new Date();
-        if (month < 1 || month > 12) {
-            alert("YO! MONTHS ONLY GO UP TO 12. CHECK YOUR EXPIRY DATE AGAIN.");
-            return;
-        }
-        if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1)) {
-            alert("HAHAHAHHAHA! YOUR CARD IS EXPIRED! HAHAHAHAHA!");
-            return;
-        }
-
-        if (!movie || !showtime || seatList.length === 0) {
-            alert("Missing booking information. Please pick your seats again.");
-            window.location.href = "viewtimes.html";
-            return;
-        }
-
-        try {
-            const response = await fetch("/api/seats/purchase", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    movie: movie,
-                    showtime: showtime,
-                    seats: seatList
-                })
-            });
-
-            const result = await response.json();
-            if (!response.ok || !result.success) {
-                const conflicts = Array.isArray(result.conflicts) ? result.conflicts.join(", ") : "Unknown seats";
-                alert("Some seats are already purchased: " + conflicts + ". Please reselect seats.");
-                window.location.href =
-                    "tickets.html?movie=" + encodeURIComponent(movie) +
-                    "&showtimes=" + encodeURIComponent(showtime) +
-                    "&date=" + encodeURIComponent(date || "");
+            if (!cardName || !cardNumber || !expiry || !cvv) {
+                alert("Yo! You didn't fill in all the payment fields, dummy!");
                 return;
             }
-        } catch (error) {
-            alert("Could not complete purchase right now. Please try again.");
-            return;
-        }
 
-        window.location.href =
-            "paymentconfirmation.html?movie=" + encodeURIComponent(movie) +
-            "&showtime=" + encodeURIComponent(showtime) +
-            "&seats=" + encodeURIComponent(seatList.join(",")) +
-            "&total=" + encodeURIComponent(totalPrice.toFixed(2)) +
-            "&promoCode=" + encodeURIComponent(promoCodeApplied) +
-            "&promoPercent=" + encodeURIComponent(String(promoPercentOff)) +
-            "&promoDiscount=" + encodeURIComponent(promoDiscount.toFixed(2)) +
-            "&date=" + encodeURIComponent(date || "");
+            const cardDigits = cardNumber.replace(/\s/g, "");
+            if (cardDigits.length !== 16 || isNaN(cardDigits)) {
+                alert("LOOK AT YOUR CARD NUMBER. DOES THAT LOOK LIKE 16 DIGITS TO YOU?!");
+                return;
+            }
+
+            if (cvv.length !== 3 || isNaN(cvv)) {
+                alert("A NORMAL HUMAN HAVE THREE FINGERS. LOOK AT YOUR FINGERS AND COUNT TO THREE. THAT'S HOW MUCH DIGITS SHOULD BE IN THE CCV!");
+                return;
+            }
+
+            const parts = expiry.split("/");
+            if (parts.length !== 2) {
+                alert("BASED ON YOUR ''EXPIRY DATE'', THAT CARD DON'T BE LOOKIN VALID, BUDDY!");
+                return;
+            }
+
+            const month = parseInt(parts[0]);
+            const year = parseInt("20" + parts[1]);
+            const now = new Date();
+            if (month < 1 || month > 12) {
+                alert("YO! MONTHS ONLY GO UP TO 12. CHECK YOUR EXPIRY DATE AGAIN.");
+                return;
+            }
+
+            if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1)) {
+                alert("HAHAHAHHAHA! YOUR CARD IS EXPIRED! HAHAHAHAHA!");
+                return;
+            }
+
+            if (!movie || !showtime || seatList.length === 0) {
+                alert("Missing booking information. Please pick your seats again.");
+                window.location.href = "viewtimes.html";
+                return;
+            }
+
+            // Disable button to prevent double submission
+            payBtn.disabled = true;
+            payBtn.textContent = "Processing...";
+
+            try {
+                // Send purchase request to backend including the orderNumber and date
+                // The orderNumber was generated at the top of this page so it's the same
+                // one that will appear on the receipt and be saved to the database
+                const response = await fetch("/api/seats/purchase", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        movie: movie,
+                        showtime: showtime,
+                        date: date || "",
+                        seats: seatList,
+                        orderNumber: orderNumber
+                    })
+                });
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok || !result.success) {
+                    const conflicts = Array.isArray(result.conflicts) ? result.conflicts.join(", ") : "Unknown seats";
+                    alert("Some seats are already purchased: " + conflicts + ". Please reselect seats.");
+                    window.location.href =
+                        "tickets.html?movie=" + encodeURIComponent(movie) +
+                        "&showtimes=" + encodeURIComponent(showtime) +
+                        "&date=" + encodeURIComponent(date || "");
+                    return;
+                }
+            } catch (error) {
+                alert("Could not complete purchase right now. Please try again.");
+                payBtn.disabled = false;
+                payBtn.textContent = "Pay Now";
+                return;
+            }
+
+            // On success redirect to confirmation page passing the orderNumber through the URL
+            const finalTotal = recalculate();
+            window.location.href =
+                "paymentconfirmation.html?movie=" + encodeURIComponent(movie) +
+                "&showtime=" + encodeURIComponent(showtime) +
+                "&seats=" + encodeURIComponent(seatList.join(",")) +
+                "&total=" + encodeURIComponent(finalTotal.toFixed(2)) +
+                "&date=" + encodeURIComponent(date || "") +
+                "&discount=" + encodeURIComponent(discountPercent) +
+                "&orderNumber=" + encodeURIComponent(orderNumber);
         }
     </script>
 

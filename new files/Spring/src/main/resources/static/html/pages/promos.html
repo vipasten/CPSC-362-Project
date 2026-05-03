@@ -156,7 +156,6 @@
         <h2>Create New Promo Code</h2>
 
         <!-- Form submits a POST request to the /promo endpoint -->
-        <!-- TODO: Build the /promo endpoint to save promo codes to the database -->
         <form action="/promo" method="post">
 
             <!-- The promo code string users will enter at checkout (e.g. SUMMER20) -->
@@ -181,7 +180,6 @@
     <h2>Existing Promo Codes</h2>
 
     <!-- Table showing all currently active promo codes -->
-    <!-- TODO: Should replace placeholder rows with th:each from Thymeleaf like viewmembership.html -->
     <!-- Delete button should POST to /promo/delete?id=X to remove the code from the database -->
     <table class="promo-table">
         <tr>

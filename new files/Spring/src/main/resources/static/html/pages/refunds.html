@@ -4,18 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refunds</title>
-    <!-- Link to the shared stylesheet for the whole site -->
     <link rel="stylesheet" href="../style.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin: 0;
-        }
+        body { font-family: Arial, sans-serif; color: white; text-align: center; padding: 30px; margin: 0; }
 
-        /* Each refund request displayed as a card */
         .refund-card {
             background-color: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -90,32 +82,16 @@
 
         .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        .reply-btn {
-            flex: 1; padding: 10px; font-size: 14px; font-weight: bold;
-            border: none; border-radius: 10px; cursor: pointer;
-            background: #ab191ecd; color: white;
-        }
+        .reply-btn { flex: 1; padding: 10px; font-size: 14px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: #ab191ecd; color: white; }
         .reply-btn:hover { background: #8a1015; }
 
-        .approve-btn {
-            flex: 1; padding: 10px; font-size: 14px; font-weight: bold;
-            border: none; border-radius: 10px; cursor: pointer;
-            background: #4caf50; color: white;
-        }
+        .approve-btn { flex: 1; padding: 10px; font-size: 14px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: #4caf50; color: white; }
         .approve-btn:hover { background: #388e3c; }
 
-        .deny-btn {
-            flex: 1; padding: 10px; font-size: 14px; font-weight: bold;
-            border: none; border-radius: 10px; cursor: pointer;
-            background: #c0392b; color: white;
-        }
+        .deny-btn { flex: 1; padding: 10px; font-size: 14px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: #c0392b; color: white; }
         .deny-btn:hover { background: #8a1015; }
 
-        .back-btn {
-            padding: 12px 28px; font-size: 15px;
-            border: 1px solid rgba(255,255,255,0.25); border-radius: 16px;
-            cursor: pointer; background: transparent; color: white;
-        }
+        .back-btn { padding: 12px 28px; font-size: 15px; border: 1px solid rgba(255,255,255,0.25); border-radius: 16px; cursor: pointer; background: transparent; color: white; }
         .back-btn:hover { background: rgba(255,255,255,0.08); }
 
         .loading { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 30px; }
@@ -125,18 +101,13 @@
 <body>
 
     <h1>Refund Requests</h1>
-    <p>Review, reply to, and process refund requests submitted by users.</p>
-
+    <p>Review, reply to, and process refund requests submitted by those silly users.</p>
     <button class="back-btn" onclick="window.location.href='adminhomepage.html'">Back to Admin Home</button>
 
-    <!-- Loading message shown while fetching data -->
     <p class="loading" id="loadingMsg">Loading refund requests...</p>
-
-    <!-- Container where refund cards are rendered dynamically -->
     <div id="refundContainer"></div>
 
     <script>
-        // Fetch all refund requests from the backend on page load
         async function loadAllRefunds() {
             try {
                 const response = await fetch("/api/refunds/all");
@@ -144,18 +115,18 @@
 
                 document.getElementById("loadingMsg").style.display = "none";
                 const container = document.getElementById("refundContainer");
+                container.innerHTML = "";
 
                 if (!data || data.length === 0) {
                     container.innerHTML = "<p class='no-requests'>No refund requests yet.</p>";
                     return;
                 }
 
-                // Render a card for each refund request
                 data.forEach(request => {
                     const card = document.createElement("div");
                     card.className = "refund-card";
 
-                    // Determine status label color
+                    // Status label
                     let statusHtml = "";
                     const status = request.status ? request.status.toLowerCase() : "pending";
                     if (status === "pending") statusHtml = "<span class='status-pending'>Pending</span>";
@@ -163,19 +134,24 @@
                     else if (status === "denied") statusHtml = "<span class='status-denied'>Denied</span>";
                     else if (status === "closed") statusHtml = "<span class='status-closed'>Closed</span>";
 
-                    // Build admin reply message HTML if one exists
-                    let adminReplyHtml = "";
-                    if (request.adminReply) {
-                        const replyTime = request.repliedAt ? new Date(request.repliedAt).toLocaleString('en-US') : "";
-                        adminReplyHtml = `
-                            <div class="message admin">
-                                <div class="message-header"><strong>Admin</strong> &nbsp; ${replyTime}</div>
-                                <div>${request.adminReply}</div>
-                            </div>
-                        `;
-                    }
-
                     const submitTime = request.submittedAt ? new Date(request.submittedAt).toLocaleString('en-US') : "";
+
+                    // Build message thread HTML from the messages array
+                    let messagesHtml = "";
+                    if (request.messages && request.messages.length > 0) {
+                        request.messages.forEach(msg => {
+                            const msgClass = msg.sender === "ADMIN" ? "admin" : "customer";
+                            const sentTime = msg.sentAt ? new Date(msg.sentAt).toLocaleString('en-US') : "";
+                            messagesHtml += `
+                                <div class="message ${msgClass}">
+                                    <div class="message-header"><strong>${msg.senderName}</strong> &nbsp; ${sentTime}</div>
+                                    <div>${msg.message}</div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        messagesHtml = "<p style='color:rgba(255,255,255,0.3); font-size:13px;'>No messages yet.</p>";
+                    }
 
                     card.innerHTML = `
                         <div class="card-header">
@@ -183,7 +159,7 @@
                             ${statusHtml}
                         </div>
                         <div class="card-detail">Name: <span>${request.firstName} ${request.lastName}</span></div>
-                        <div class="card-detail">Order #: <span>${request.orderNumber}</span></div>
+                        <div class="card-detail">Order #: <span>${request.orderNumber || "N/A"}</span></div>
                         <div class="card-detail">Movie: <span>${request.movie}</span></div>
                         <div class="card-detail">Reason: <span>${request.reason}</span></div>
                         <div class="card-detail">Details: <span>${request.details || "No additional details."}</span></div>
@@ -191,11 +167,7 @@
 
                         <div class="thread">
                             <h4>Conversation</h4>
-                            <div class="message customer">
-                                <div class="message-header"><strong>${request.firstName} ${request.lastName}</strong> &nbsp; ${submitTime}</div>
-                                <div>${request.details || "No additional details."}</div>
-                            </div>
-                            ${adminReplyHtml}
+                            <div id="thread-${request.refNumber}">${messagesHtml}</div>
                         </div>
 
                         <div class="reply-section">
@@ -216,7 +188,7 @@
             }
         }
 
-        // Send admin reply to a specific refund request
+        // Send admin reply; adds a new message to the thread without refreshing the whole page
         async function sendReply(refNumber) {
             const text = document.getElementById("reply-" + refNumber).value.trim();
             if (!text) {
@@ -231,10 +203,18 @@
                     { method: "POST" }
                 );
                 const result = await response.json();
+
                 if (result.success) {
-                    alert("Reply sent successfully!");
+                    // Add the new message directly to the thread without re-rendering the whole page
+                    const thread = document.getElementById("thread-" + refNumber);
+                    const div = document.createElement("div");
+                    div.className = "message admin";
+                    div.innerHTML = `
+                        <div class="message-header"><strong>Admin</strong> &nbsp; ${new Date().toLocaleString('en-US')}</div>
+                        <div>${text}</div>
+                    `;
+                    thread.appendChild(div);
                     document.getElementById("reply-" + refNumber).value = "";
-                    loadAllRefunds(); // Refresh the page data
                 } else {
                     alert("Could not send reply. Please try again.");
                 }
@@ -243,10 +223,9 @@
             }
         }
 
-        // Approve or deny a refund request
+        // Approve or deny; refreshes the full list to show updated status
         async function updateStatus(refNumber, action) {
-            const actionLabel = action === "approve" ? "approve" : "deny";
-            if (!confirm("Are you sure you want to " + actionLabel + " this request?")) return;
+            if (!confirm("Are you sure you want to " + action + " this request?")) return;
 
             try {
                 const response = await fetch(
@@ -255,8 +234,7 @@
                 );
                 const result = await response.json();
                 if (result.success) {
-                    alert("Request " + actionLabel + "d successfully!");
-                    loadAllRefunds(); // Refresh the page data
+                    loadAllRefunds();
                 } else {
                     alert("Could not update request. Please try again.");
                 }
@@ -265,7 +243,6 @@
             }
         }
 
-        // Load all refund requests when the page opens
         loadAllRefunds();
     </script>
 

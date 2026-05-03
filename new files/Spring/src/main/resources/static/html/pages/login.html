@@ -10,6 +10,12 @@
 
 <body>
 
+    <!-- Clear the role from sessionStorage when user lands on the login page -->
+    <!-- This ensures the Employee Home button disappears after signing out -->
+    <script>
+        sessionStorage.removeItem("role");
+    </script>
+
     <!-- Navigation bar with icon buttons linking to other pages -->
     <div class="listing">
         <!-- Home button -->

@@ -1,42 +1,62 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
     <head>
-        <meta charset = "UTF-8">
-        <meta name = "viewport" content = "width=device-width, intial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Movie Theater</title>
         <link rel="stylesheet" href="style.css" />
-
     </head>
     <body>
+
+        <script>
+            // If the URL has ?login=success it means the user just logged in as a MEMBER
+            // Set their role in sessionStorage so other pages know they are logged in
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("login") === "success") {
+                sessionStorage.setItem("role", "MEMBER");
+            }
+
+            // If the URL has ?signup=success it means the user just signed up
+            // Also treat them as a logged in MEMBER
+            if (urlParams.get("signup") === "success") {
+                sessionStorage.setItem("role", "MEMBER");
+            }
+        </script>
+
         <header>
-            
-            <div class = "box">
+            <div class="box">
                 <nav>
-                <ul>
-                        <div class = "icon"><button type = "button">
-                            <img src="images/home-icon.svg" alt = "Home Icon">
+                    <ul>
+                        <!-- Home button -->
+                        <div class="icon"><button type="button">
+                            <img src="images/home-icon.svg" alt="Home Icon">
                             <a href="index.html"></a>
                         </button></div>
 
-                        <div class = "push_center">
+                        <!-- Logo centered -->
+                        <div class="push_center">
                             <img src="./images/Logo (1).png" alt="Movie Theater Logo">
                         </div>
 
-                        <div class = "push right"><a href="pages/viewtimes.html">
-                            <button type = "button">
-                            <img src="images/movie-icon.svg" alt = "View Times Icon" >
+                        <!-- View Times button -->
+                        <div class="push right"><a href="pages/viewtimes.html">
+                            <button type="button">
+                                <img src="images/movie-icon.svg" alt="View Times Icon">
                             </button>
                         </a></div>
 
+                        <!-- About Us button -->
                         <div><a href="pages/aboutus.html">
-                            <button type = "button">
-                            <img src = "images/about-us-icon.svg" alt = "About Us Icon">
+                            <button type="button">
+                                <img src="images/about-us-icon.svg" alt="About Us Icon">
                             </button>
                         </a></div>
 
-                        <div><a href="pages/login.html">
-                            <button type = "button">
-                            <img src = "images/account-icon.svg" alt = "Account Icon">
+                        <!-- Account button -->
+                        <!-- Links to memberaccount.html if logged in as MEMBER, otherwise goes to login.html -->
+                        <div id="accountBtn"><a href="pages/login.html">
+                            <button type="button">
+                                <img src="images/account-icon.svg" alt="Account Icon">
                             </button>
                         </a></div>
 
@@ -45,17 +65,26 @@
                 <h1 style="text-align: center;">Welcome to our Movie Theater!</h1>
             </div>
         </header>
-        <div class = "content">
 
+        <div class="content"></div>
 
-        </div>
-            <p style="text-align: center;">.</p>
-        <div class = "footer">
+        <p style="text-align: center;">Experience the best movie-going experience with us. Check out our showtimes, book your tickets, and enjoy the latest blockbusters in our state-of-the-art theaters.</p>
+
+        <div class="footer">
             <a href="pages/supportticket.html">
-                <button type = "button" class="support-ticket-button">
-                    <img src="images/support-icon.svg" alt = "Support Icon">
+                <button type="button" class="support-ticket-button">
+                    <img src="images/support-icon.svg" alt="Support Icon">
                 </button>
             </a>
         </div>
+
+        <script>
+            // If the user is logged in as a MEMBER, change the account icon to go to memberaccount.html
+            // Otherwise it stays pointing to login.html
+            if (sessionStorage.getItem("role") === "MEMBER") {
+                document.getElementById("accountBtn").innerHTML = '<a href="pages/memberaccount.html"><button type="button"><img src="images/account-icon.svg" alt="Account Icon"></button></a>';
+            }
+        </script>
+
     </body>
 </html>

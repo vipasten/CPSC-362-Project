@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body { font-family: Arial, sans-serif; color: white; text-align: center; padding: 30px; margin: 0; }
+
+        .account-icon { font-size: 60px; margin-bottom: 10px; }
+
+        .account-box {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .account-box h2 { text-align: center; margin-top: 0; margin-bottom: 20px; color: #FFE96B; }
+
+        .account-box p {
+            font-size: 16px; margin: 12px 0; color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+        }
+
+        .account-box p:last-of-type { border-bottom: none; }
+        .account-box span { color: #FFE96B; font-weight: bold; }
+
+        /* Ticket and refund history boxes */
+        .history-box {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .history-box h2 { text-align: center; margin-top: 0; margin-bottom: 20px; color: #FFE96B; }
+
+        /* Individual ticket card */
+        .ticket-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .ticket-card p { margin: 6px 0; font-size: 14px; color: white; }
+        .ticket-card span { color: #FFE96B; font-weight: bold; }
+
+        /* Individual refund card */
+        .refund-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .refund-card:hover { background-color: rgba(255,255,255,0.08); }
+
+        .refund-card p { margin: 6px 0; font-size: 14px; color: white; }
+        .refund-card span { color: #FFE96B; font-weight: bold; }
+
+        .refund-card .view-thread {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .refund-card .view-thread:hover { background: rgba(255,255,255,0.1); }
+
+        .status-pending { color: #FFE96B; font-weight: bold; }
+        .status-approved { color: #4caf50; font-weight: bold; }
+        .status-denied { color: #e05252; font-weight: bold; }
+        .status-closed { color: rgba(255,255,255,0.4); font-weight: bold; }
+
+        .no-items { text-align: center; color: rgba(255,255,255,0.4); font-size: 14px; padding: 20px; }
+
+        /* Quick links box */
+        .links-box {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .links-box h2 { margin-top: 0; margin-bottom: 15px; text-align: center; }
+
+        .action-btn {
+            width: 100%; padding: 12px; font-size: 15px; font-weight: bold;
+            border: none; border-radius: 12px; cursor: pointer;
+            background: #ab191ecd; color: white; margin-bottom: 10px;
+        }
+
+        .action-btn:hover { background: #8a1015; }
+
+        .secondary-btn {
+            width: 100%; padding: 12px; font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25); border-radius: 12px;
+            cursor: pointer; background: transparent; color: white; margin-bottom: 10px;
+        }
+
+        .secondary-btn:hover { background: rgba(255,255,255,0.08); }
+
+        .signout-btn {
+            width: 100%; max-width: 500px; margin: 10px auto; display: block;
+            padding: 12px; font-size: 15px; font-weight: bold;
+            border: none; border-radius: 16px; cursor: pointer;
+            background: #ab191ecd; color: white;
+        }
+
+        .signout-btn:hover { background: #8a1015; }
+
+        .loading { color: rgba(255,255,255,0.5); font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar -->
+    <div class="listing">
+        <button><a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a></button>
+        <button><a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a></button>
+        <button><a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a></button>
+    </div>
+
+    <div class="account-icon">👤</div>
+    <h1>My Account</h1>
+
+    <!-- Account info box -->
+    <div class="account-box">
+        <h2>Account Info</h2>
+        <p>Username: <span id="usernameDisplay">Loading...</span></p>
+        <p>Role: <span id="roleDisplay">Loading...</span></p>
+        <p>Status: <span style="color: #4caf50; font-weight: bold;">Active</span></p>
+    </div>
+
+    <!-- Ticket history box -->
+    <div class="history-box">
+        <h2>🎟️ My Tickets</h2>
+        <p class="loading" id="ticketsLoading">Loading your tickets...</p>
+        <div id="ticketsList"></div>
+    </div>
+
+    <!-- Refund requests box -->
+    <div class="history-box">
+        <h2>💸 My Refund Requests</h2>
+        <p class="loading" id="refundsLoading">Loading your refund requests...</p>
+        <div id="refundsList"></div>
+    </div>
+
+    <!-- Quick links box -->
+    <div class="links-box">
+        <h2>Quick Actions</h2>
+        <button class="action-btn" onclick="window.location.href='viewtimes.html'">🎬 Browse Showtimes</button>
+        <button class="secondary-btn" onclick="window.location.href='refundrequest.html'">💸 Request a Refund</button>
+        <button class="secondary-btn" onclick="window.location.href='supportticket.html'">🎫 Submit a Support Ticket</button>
+    </div>
+
+    <button class="signout-btn" onclick="signOut()">Sign Out</button>
+
+    <script>
+        async function loadPage() {
+            try {
+                const sessionRes = await fetch("/api/session", { credentials: "include" });
+                const sessionData = await sessionRes.json();
+
+                if (!sessionData.loggedIn) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                document.getElementById("usernameDisplay").textContent = sessionData.username;
+                document.getElementById("roleDisplay").textContent = sessionData.role;
+                sessionStorage.setItem("role", sessionData.role);
+
+                // Load tickets and refunds in parallel
+                await Promise.all([loadTickets(), loadRefunds()]);
+
+            } catch (error) {
+                if (sessionStorage.getItem("role") !== "MEMBER") {
+                    window.location.href = "login.html";
+                }
+            }
+        }
+
+        // Fetch and render purchased tickets
+        async function loadTickets() {
+            try {
+                const res = await fetch("/api/seats/mine", { credentials: "include" });
+                const data = await res.json();
+
+                document.getElementById("ticketsLoading").style.display = "none";
+                const ticketsList = document.getElementById("ticketsList");
+
+                if (!data.success || !data.tickets || data.tickets.length === 0) {
+                    ticketsList.innerHTML = "<p class='no-items'>You haven't purchased any tickets yet!</p>";
+                    return;
+                }
+
+                // Group tickets by orderNumber so one purchase shows as one card
+                const grouped = {};
+                data.tickets.forEach(ticket => {
+                    const key = ticket.orderNumber || (ticket.movie + "|" + ticket.showtime + "|" + ticket.date);
+                    if (!grouped[key]) {
+                        grouped[key] = {
+                            movie: ticket.movie,
+                            showtime: ticket.showtime,
+                            date: ticket.date,
+                            seats: [],
+                            orderNumber: ticket.orderNumber,
+                            purchasedAt: ticket.purchasedAt
+                        };
+                    }
+                    grouped[key].seats.push(ticket.seat);
+                });
+
+                Object.values(grouped).forEach(group => {
+                    const card = document.createElement("div");
+                    card.className = "ticket-card";
+
+                    let dateDisplay = group.date;
+                    if (group.date && group.date !== "NO_DATE") {
+                        const d = new Date(group.date + "T00:00:00");
+                        dateDisplay = d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    }
+
+                    card.innerHTML = `
+                        <p>Order #: <span>${group.orderNumber || "N/A"}</span></p>
+                        <p>Movie: <span>${group.movie}</span></p>
+                        <p>Date: <span>${dateDisplay}</span></p>
+                        <p>Showtime: <span>${group.showtime}</span></p>
+                        <p>Seats: <span>${group.seats.join(", ")}</span></p>
+                    `;
+                    ticketsList.appendChild(card);
+                });
+
+            } catch (error) {
+                document.getElementById("ticketsLoading").style.display = "none";
+                document.getElementById("ticketsList").innerHTML = "<p class='no-items'>Could not load tickets. Please try again later.</p>";
+            }
+        }
+
+        // Fetch and render refund requests
+        async function loadRefunds() {
+            try {
+                const res = await fetch("/api/refunds/mine", { credentials: "include" });
+                const data = await res.json();
+
+                document.getElementById("refundsLoading").style.display = "none";
+                const refundsList = document.getElementById("refundsList");
+
+                if (!data.success || !data.refunds || data.refunds.length === 0) {
+                    refundsList.innerHTML = "<p class='no-items'>You haven't submitted any refund requests yet!</p>";
+                    return;
+                }
+
+                data.refunds.forEach(refund => {
+                    const card = document.createElement("div");
+                    card.className = "refund-card";
+
+                    // Status with color coding
+                    let statusHtml = "";
+                    const status = refund.status ? refund.status.toLowerCase() : "pending";
+                    if (status === "pending") statusHtml = "<span class='status-pending'>Pending Review</span>";
+                    else if (status === "approved") statusHtml = "<span class='status-approved'>Approved</span>";
+                    else if (status === "denied") statusHtml = "<span class='status-denied'>Denied</span>";
+                    else if (status === "closed") statusHtml = "<span class='status-closed'>Closed</span>";
+
+                    const submitTime = refund.submittedAt ? new Date(refund.submittedAt).toLocaleDateString('en-US') : "";
+
+                    card.innerHTML = `
+                        <p>REF #: <span>${refund.refNumber}</span></p>
+                        <p>Movie: <span>${refund.movie}</span></p>
+                        <p>Order #: <span>${refund.orderNumber || "N/A"}</span></p>
+                        <p>Reason: <span>${refund.reason}</span></p>
+                        <p>Submitted: <span>${submitTime}</span></p>
+                        <p>Status: ${statusHtml}</p>
+                        <button class="view-thread" onclick="window.location.href='refundthread.html?ref=${encodeURIComponent(refund.refNumber)}'">View Thread →</button>
+                    `;
+                    refundsList.appendChild(card);
+                });
+
+            } catch (error) {
+                document.getElementById("refundsLoading").style.display = "none";
+                document.getElementById("refundsList").innerHTML = "<p class='no-items'>Could not load refund requests. Please try again later.</p>";
+            }
+        }
+
+        function signOut() {
+            sessionStorage.removeItem("role");
+            window.location.href = "/logout";
+        }
+
+        loadPage();
+    </script>
+
+</body>
+</html>

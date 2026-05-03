@@ -81,7 +81,6 @@
 </head>
 <body>
 
-    <div class="checkmark">✅</div>
     <h1>Payment Confirmed!</h1>
     <p>Wow, can't believe you actually bought tickets to a movie that doesn't exist. Thanks for your card information we guess? We're definitely buying a lot of chicken nuggies with it!</p>
 
@@ -118,7 +117,7 @@
         const tax = total - discountedSubtotal;
         const subtotal = discountedSubtotal + promoDiscount;
 
-        const orderNumber = "ORD-" + Math.floor(Math.random() * 900000 + 100000);
+        const orderNumber = params.get("orderNumber") || "ORD-" + Math.floor(Math.random() * 900000 + 100000);
 
         document.getElementById("orderNumber").textContent = "Order #: " + orderNumber;
         document.getElementById("movieDisplay").textContent = movie;
