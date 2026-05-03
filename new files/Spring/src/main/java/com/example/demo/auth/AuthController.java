@@ -10,27 +10,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import java.util.List;
 
-// The controller with the big responsibiliity for handling authentication and the basic naviagtion
-// This handles signup and login alo viewing membership data
+// The controller with the big responsibiliity for handling authentication and the basic naviagtion 
+// This handles signup and login alo viewing membership data 
 @Controller
 public class AuthController {
 
-	// References then to the service layer and that is where the authentication logic is then handled
+	// References then to the service layer and that is where the authentication logic is then handled 
 	private final AuthService authService;
 
-	// The constructo injection which allows the Spring to provide AuthService automatically
+	// The constructo injection which allows the Spring to provide AuthService automatically 
 	public AuthController(AuthService authService) {
 		this.authService = authService;
 	}
 
-	// Default route to the homepage
-	// Essentially just redirects the user to the main HTML index page
+	// Default route to the homepage 
+	// Essentially just redirects the user to the main HTML index page 
 	@GetMapping("/")
 	public String home() {
 		return "redirect:/html/index.html";
 	}
 
-	// Endpoint for Signup
+	// Endpoint for Signup 
 
 	// This is what handles the signup form submission requested from the frontend 
 	// This also takes the users input and then sends to to the service layer for the creation of an account 
@@ -42,7 +42,7 @@ public class AuthController {
 		@RequestParam String password
 	) {
 
-		// This is a trim input that removes any extra spaces
+		// This is a trim input that removes any extra spaces 
 		String firstName = fname.trim();
 		String lastName = lname.trim();
 		String userName = username.trim();

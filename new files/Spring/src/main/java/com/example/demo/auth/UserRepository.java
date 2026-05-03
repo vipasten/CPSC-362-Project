@@ -9,9 +9,6 @@ import java.util.List;
 // The repository which is the interface for the user-related database operations
 // It extends the JpaRepository in order to provide the built in CRUD functionality 
 
-// The repository which is the interface for the user-related database operations
-// It extends the JpaRepository in order to provide the built in CRUD functionality 
-
 public interface UserRepository extends JpaRepository<UserAccount, Long> {
 	
 	// Finds a user by their username and this process happens during login
