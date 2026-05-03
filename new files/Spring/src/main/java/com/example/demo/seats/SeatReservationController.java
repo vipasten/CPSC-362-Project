@@ -3,7 +3,6 @@ package com.example.demo.seats;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-// This is the controller that is responsible for handling all of the seat-related API request
-// This would include retrieving taken seats and processing seat purchases
+// This is the controller that is responsible for handling all of the seat-related API request 
+// This would include retrieving taken seats and processing seat purchases 
 @RestController
 @RequestMapping("/api/seats")
 public class SeatReservationController {
 
-	// Refernce to the service layer and that is where the acutal business logic happens
-	// This controller should only handle the request and the responses only
+	// Refernce to the service layer and that is where the acutal business logic happens 
+	// This controller should only handle the request and the responses only 
 	private final SeatReservationService seatReservationService;
 
-	// Injection of constructed the more efficent way in Spring
-	// which also allows the spring to automatically provide the service depenedency
+	// Injection of constructed the more efficent way in Spring 
+	// which also allows the spring to automatically provide the service depenedency 
 	public SeatReservationController(SeatReservationService seatReservationService) {
 		this.seatReservationService = seatReservationService;
 	}

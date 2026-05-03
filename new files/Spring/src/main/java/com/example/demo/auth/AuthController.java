@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import java.util.List;
 
 // The controller with the big responsibiliity for handling authentication and the basic naviagtion
 // This handles signup and login alo viewing membership data
@@ -45,33 +47,33 @@ public class AuthController {
 		String lastName = lname.trim();
 		String userName = username.trim();
 
-		// boolean - calls the service to attempt the creation of an account
+		// boolean - calls the service to attempt the creation of an account 
 		boolean created = authService.signUp(firstName, lastName, userName, password);
 		
-		// If the attempt is successful, then the user is redirected to the home page with a flag of success
+		// If the attempt is successful, then the user is redirected to the home page with a flag of success 
 		if (created) {
 			return "redirect:/html/index.html?signup=success";
 		}
 
-		// However if the username is already taken, the user will be redirected back to the sign up page
-		// with an error
+		// However if the username is already taken, the user will be redirected back to the sign up page 
+		// with an error 
 		return "redirect:/html/pages/signup.html?error=username-taken";
 	}
 
 	// Endpoint for Login
 	
-	// This is what handles the login form submission from the user
-	// and then it will validate the credentials and then follow up by determing the users role
+	// This is what handles the login form submission from the user 
+	// and then it will validate the credentials and then follow up by determing the users role 
 	@PostMapping("/login")
 	public String login(
 		@RequestParam String username,
 		@RequestParam String password
 	) {
 
-		// Trinm the username just to avoid any sort of mismatches
+		// Trinm the username just to avoid any sort of mismatches 
 		String userName = username.trim();
 		
-		// this is a call to service in order to validate the login and then return the role
+		// this is a call to service in order to validate the login and then return the role 
 		String role = authService.loginAndGetRole(userName, password);
 
 		// This will redirect the user based on the role in other words (role-base routing)
@@ -85,27 +87,27 @@ public class AuthController {
 			return "redirect:/html/index.html?login=success";
 		}
 
-		// In any event the login fails user is redirected to the login page with an error
+		// In any event the login fails user is redirected to the login page with an error 
 		return "redirect:/html/pages/login.html?error=invalid-credentials";
 	}
 
 	// Membership Viewing (Admin feauture )
 	
-	// This displays the list of users that can be filtered by a search query
-	// used for all of the viewing membership data
+	// This displays the list of users that can be filtered by a search query 
+	// used for all of the viewing membership data 
 	@GetMapping("/viewmembership")
 	public String viewUsers(@RequestParam(required = false) String search, Model model) {
 		
-		// This is what retrieves the filtered or full user list from the service
+		// This is what retrieves the filtered or full user list from the service 
 		List<UserAccount> users = authService.searchUsers(search);
 		
-		// Add user list to the model for frontend rendering
+		// Add user list to the model for frontend rendering 
 		model.addAttribute("users", users);
 		
-		// Perserves the search input that way it stays in the UI
+		// Perserves the search input that way it stays in the UI 
 		model.addAttribute("searchQuery", search != null ? search : "");
 		
-		// This return the view name HTML page
+		// This return the view name HTML page 
 		return "viewmembership";
 	}
 }
