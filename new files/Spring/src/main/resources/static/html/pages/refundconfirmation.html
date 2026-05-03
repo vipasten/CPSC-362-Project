@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Request Submitted</title>
+    <!-- Link to the shared stylesheet for the whole site -->
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        /* Large checkmark emoji at the top */
+        .checkmark {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        /* Dark rounded box showing the request summary */
+        .summary-box {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .summary-box h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #4caf50;
+        }
+
+        /* Each line in the summary */
+        .summary-box p {
+            font-size: 16px;
+            margin: 12px 0;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        /* Yellow highlight for data values */
+        .summary-box span {
+            color: #FFE96B;
+            font-weight: bold;
+        }
+
+        /* Big highlighted REF number box */
+        .ref-box {
+            background-color: rgba(232, 201, 109, 0.15);
+            border: 2px solid #FFE96B;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .ref-box p {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        /* Large REF number text */
+        .ref-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFE96B;
+            letter-spacing: 0.1em;
+        }
+
+        .ref-warning {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 8px;
+        }
+
+        /* Button to go look up the refund status later */
+        .lookup-btn {
+            margin-top: 20px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #ab191ecd;
+            color: white;
+            width: 100%;
+        }
+
+        .lookup-btn:hover {
+            background: #8a1015;
+        }
+
+        /* Transparent home button */
+        .home-btn {
+            margin-top: 12px;
+            padding: 12px 28px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            width: 100%;
+        }
+
+        .home-btn:hover {
+            background: rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Success checkmark and title -->
+    <div class="checkmark">✅</div>
+    <h1>Refund Request Submitted!</h1>
+    <p>Your request has been received. Please save your REF number below — you will need it to check the status of your request.</p>
+
+    <div class="summary-box">
+        <h2>Your Request Summary</h2>
+
+        <!-- Big highlighted REF number -->
+        <div class="ref-box">
+            <p>Your Refund Reference Number</p>
+            <!-- REF number filled in dynamically by JavaScript below -->
+            <div class="ref-number" id="refDisplay"></div>
+            <p class="ref-warning">⚠️ Save this number! You will need it to check your refund status.</p>
+        </div>
+
+        <!-- Request details filled in dynamically by JavaScript -->
+        <p>Name: <span id="nameDisplay"></span></p>
+        <p>Order #: <span id="orderDisplay"></span></p>
+        <p>Movie: <span id="movieDisplay"></span></p>
+        <p>Reason: <span id="reasonDisplay"></span></p>
+        <p>Status: <span style="color: #FFE96B; font-weight: bold;">Pending Review</span></p>
+
+        <!-- Button to go to the lookup page pre-filled with this REF number -->
+        <button class="lookup-btn" onclick="goToLookup()">Check Refund Status</button>
+
+        <!-- Button to return to the home page -->
+        <button class="home-btn" onclick="window.location.href='../index.html'">Back to Home</button>
+    </div>
+
+    <script>
+        // Read all request details passed through the URL from refundrequest.html
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get("ref");
+        const fname = params.get("fname");
+        const lname = params.get("lname");
+        const orderNumber = params.get("orderNumber");
+        const movie = params.get("movie");
+        const reason = params.get("reason");
+
+        // Display all the details on the page
+        document.getElementById("refDisplay").textContent = ref;
+        document.getElementById("nameDisplay").textContent = fname + " " + lname;
+        document.getElementById("orderDisplay").textContent = orderNumber;
+        document.getElementById("movieDisplay").textContent = movie;
+        document.getElementById("reasonDisplay").textContent = reason;
+
+        // Redirects to the refund lookup page with the REF number pre-filled in the URL
+        // so the customer doesn't have to type it in again right after submitting
+        function goToLookup() {
+            window.location.href = "refundlookup.html?ref=" + encodeURIComponent(ref);
+        }
+    </script>
+
+</body>
+</html>
