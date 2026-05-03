@@ -1,14 +1,16 @@
 package com.example.demo.auth;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
 
-// This is the service layer and is ultimatly is resposnible for handling aunthetication logic 
-// This includes things such as signup, login validation, and user managment 
+// This is the service layer and is ultimately is responsible for handling authentification logic
+// This includes things such as signup, login validation, and user managment
 @Service
 public class AuthService {
 

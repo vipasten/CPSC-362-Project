@@ -1,75 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Link to the shared stylesheet for the whole site -->
-    <link rel="stylesheet" href="../style.css" />
-</head>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="../images/tab.png">
+        <title>File a Support Ticket</title>
+        <link rel="stylesheet" href="../style.css" />
 
-<body>
-    <h1>
-        <!-- Navigation bar with icon buttons linking to other pages -->
-        <div class="listing">
-            <!-- Home button -->
-            <button>
-                <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
-            </button>
-            <!-- View Showtimes button -->
-            <button>
-                <a href="viewtimes.html"><img src="../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
-            </button>
-            <!-- Support Ticket button -->
-            <button>
-                <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
-            </button>
-        </div>
+    </head>
 
-        <!-- Support ticket form container styled with the .forms class from style.css -->
-        <div class="forms">
-            <h1>File a Support Ticket</h1>
+    <body>
+            <h1>
+                <div class = "listing">
+                    <button>
+                        <a href="../index.html"><img src="../images/home-icon.svg" alt="Home Icon" class="icon"></a>
+                    </button>
+                    <button>
+                        <a href="viewtimes.html"><img src= "../images/movie-icon.svg" alt="View Times Icon" class="icon"></a>
+                    </button>
+                    <button>
+                        <a href="supportticket.html"><img src="../images/support-icon.svg" alt="Support Icon" class="icon"></a>
+                    </button>
+                </div>
+                <div class="forms">
+                    <h1>File a Support Ticket</h1>
 
-            <!-- Link to refund request page for users who want a refund instead -->
-            <p1>Looking for a refund? Ugh fine.<a href="refundrequest.html">Click here to submit a refund request or whatever, man.</a></p1>
+                    <form action="/submitsupportticket" method="post">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required><br><br>
 
-            <!-- Form currently submits via GET to supportsubmit.html which shows a confirmation message -->
-            <!-- TODO: Backend should save ticket data to the database instead of just redirecting -->
-            <form action="supportsubmit.html" method="get">
+                        <label for="fname">First Name:</label>
+                        <input type="text" id="fname" name="fname" required><br><br>
 
-                <!-- First name input field -->
-                <label for="fname">First Name:</label>
-                <input type="text" id="fname" name="fname" required><br><br>
+                        <label for="lname">Last Name:</label>
+                        <input type="text" id="lname" name="lname" required><br><br>
 
-                <!-- Last name input field -->
-                <label for="lname">Last Name:</label>
-                <input type="text" id="lname" name="lname" required><br><br>
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" required><br><br>
+                        
+                        <label for="details">Details:</label>
+                        <textarea name = "details"; class="large-input" required></textarea><br><br>
 
-                <!-- Subject of the support ticket -->
-                <label for="subject">Subject:</label>
-                <input type="text" id="subject" name="subject" required><br><br>
+                        <button style= background-color:var(--movie-red); type="submit">
+                            Submit Ticket</a></button>
 
-                <!-- Detailed description of the issue -->
-                <!-- Uses the .large-input class from style.css for a bigger text area -->
-                <label for="details">Details:</label>
-                <textarea class="large-input" required></textarea><br><br>
-
-                <!-- Submit button sends the form data -->
-                <button style="background-color:var(--movie-red);" type="submit">Submit Ticket</button>
-
-            </form>
-        </div>
-    </h1>
-
-    <!-- Fixed Employee Home button in the bottom left corner -->
-    <!-- Allows employees to navigate back to their home page from this page -->
-    <div style="position: fixed; bottom: 20px; left: 20px;">
-        <a href="employeehomepage.html">
-            <button style="padding: 10px 20px; border-radius: 8px; background-color: #1a1a2e; color: white; border: 1px solid white; font-size: 14px; cursor: pointer;">
-                Employee Home
-            </button>
-        </a>
-    </div>
-
-</body>
+                    </form>
+                </div>
+            </h1>
+    </body>
 </html>
