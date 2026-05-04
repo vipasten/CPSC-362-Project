@@ -161,6 +161,10 @@
     </div>
 
     <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById("orderNumber").value = params.get("orderNumber") || "";
+        document.getElementById("movie").value = params.get("movie") || "";
+
         async function submitRefund() {
             const fname = document.getElementById("fname").value.trim();
             const lname = document.getElementById("lname").value.trim();
