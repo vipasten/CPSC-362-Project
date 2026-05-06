@@ -105,20 +105,9 @@
     </div>
 
     <script>
-        // Pre-fill name fields if the user is logged in via session
-        async function prefillFromSession() {
-            try {
-                const res = await fetch("/api/session", { credentials: "include" });
-                const data = await res.json();
-                // If logged in we can potentially prefill name from the member account
-                // For now just store the session data for use during submission
-                window._sessionData = data;
-            } catch (e) {
-                window._sessionData = { loggedIn: false };
-            }
-        }
-
-        prefillFromSession();
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById("orderNumber").value = params.get("orderNumber") || "";
+        document.getElementById("movie").value = params.get("movie") || "";
 
         async function submitRefund() {
             const fname = document.getElementById("fname").value.trim();
