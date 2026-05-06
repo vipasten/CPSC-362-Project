@@ -1,5 +1,4 @@
 CPSC 362 Final Project - Movie Theater Website
-Group Members: Vierna Pasten, Damir Bubalo, Milan Bryan, Dzanh Ngyuen
 
 This is a Spring Boot website for a movie theater system.
 It includes:
