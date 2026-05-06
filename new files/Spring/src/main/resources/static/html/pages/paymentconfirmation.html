@@ -139,15 +139,6 @@
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("dateDisplay").textContent = formatted.toLocaleDateString('en-US', options);
         }
-
-        function goToRefundRequest() {
-            window.location.href = "refundrequest.html?" +
-                "orderNumber=" + encodeURIComponent(orderNumber) +
-                "&movie=" + encodeURIComponent(movie || "") +
-                "&date=" + encodeURIComponent(date || "") +
-                "&showtime=" + encodeURIComponent(showtime || "") +
-                "&seats=" + encodeURIComponent(seats || "");
-        }
     </script>
 
 </body>
