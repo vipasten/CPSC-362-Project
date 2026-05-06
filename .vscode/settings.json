@@ -12,10 +12,8 @@
         "Pasten",
         "Showtimes",
         "springframework",
-        "submitsupportticket",
         "thymeleaf",
         "Vierna",
-        "viewmembership",
-        "viewsupporttickets"
+        "viewmembership"
     ]
 }

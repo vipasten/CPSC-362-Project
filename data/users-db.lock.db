@@ -1,6 +1,6 @@
 #FileLock
-#Sun May 03 02:08:23 PDT 2026
-server=192.168.1.88\:52450
-hostName=BananaBread
+#Wed Apr 22 15:13:44 PDT 2026
+server=10.67.209.254\:57584
+hostName=10.67.209.254
 method=file
-id=19decfd5bc3bc16f7b38b16c5ab3c7a808e722d270b
+id=19db74195bb26a5b0ffe1ded01d64367d029fc8933a

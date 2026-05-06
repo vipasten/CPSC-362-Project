@@ -4,8 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="../images/tab.png">
-        <title>View Support Tickets</title>
+        <title>Support Tickets</title>
         <!-- Link to the shared stylesheet for the whole site -->
         <!-- Uses absolute path /html/style.css since this page is served by Spring Boot -->
         <link rel="stylesheet" href="/html/style.css" />
@@ -13,42 +12,25 @@
 
     <body>
         <div class="support-tickets-container">
-            <h1>View Support Tickets</h1>
+            <h1>Support Tickets</h1>
 
+            <!-- Search/filter form - submits a GET request to /viewsupporttickets -->
+            <!-- TODO: Need to build the /viewsupporttickets backend endpoint -->
+            <!-- and pass support ticket data to this template similar to /viewmembership -->
             <form action="/viewsupporttickets" method="get" style="margin-bottom: 20px;">
 
-                <!-- Search input - th:value pre-fills the field with the last search query -->
-                <input type="text" name="search" th:value="${searchQuery}" placeholder="Search by username, first name, or last name" />
-
-                <!-- Submit button triggers the search -->
+                <!-- Submit button to trigger the search/refresh -->
                 <button type="submit" style="padding: 5px 10px;">Search</button>
 
-                <!-- Clear link resets the search by navigating back to the page without a query -->
-                <a href="/viewsupporttickets" style="margin-left: 10px;">Clear</a>
+                <!-- Clear link resets the view back to showing all tickets -->
+                <a href="viewsupporttickets.html" style="margin-left: 10px;">Clear</a>
 
             </form>
 
-            <!-- Table to display support tickets -->
-            <table>
-                <tr>
-                    <th>Ticket ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Subject</th>
-                    <th>Details</th>
-                    <th>Date Submitted</th>
-                </tr>
+            <!-- TODO: Should add a table here similar to viewmembership.html -->
+            <!-- using th:each to loop through support tickets returned from the backend -->
+            <!-- Suggested columns: Ticket ID, First Name, Last Name, Subject, Details, Date Submitted -->
 
-                <!-- Loop through the list of tickets passed from the controller and display each ticket's details in a table row -->
-                <tr th:each="ticket : ${users}">
-                    <td th:text="${ticket.id}"></td>
-                    <td th:text="${ticket.firstName}"></td>
-                    <td th:text="${ticket.lastName}"></td>
-                    <td th:text="${ticket.subject}"></td>
-                    <td th:text="${ticket.description}"></td>
-                    <td th:text="${ticket.postedDate != null ? #temporals.format(ticket.postedDate, 'MM/dd/yyyy') : 'N/A'}"></td>
-                </tr>
-            </table>
         </div>
     </body>
 </html>
